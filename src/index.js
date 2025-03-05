@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         style: style,
         center: [12.4963, 41.9027], // Coordinate di Roma, cambia in base alle tue esigenze
         zoom: 5,
-        pitch: 45
+        pitch: 45,
+        maxPitch: 85
     });
 
     // Aggiunta controlli di navigazione
