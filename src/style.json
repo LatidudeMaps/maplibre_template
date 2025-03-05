@@ -1,6 +1,6 @@
 {
     "version": 8,
-    "glyphs": "https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/fonts/{fontstack}/{range}.pbf",
+    "glyphs": "https://raw.githubusercontent.com/latidudemaps/maplibre_template/main/data/fonts/{fontstack}/{range}.pbf",
     "sprite": "https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/sprites/sprite",
     "sources": {
         "basemap": {
@@ -11,6 +11,15 @@
             "tileSize": 256,
             "attribution": "&copy; ESRI ArcGIS World Imagery",
             "maxzoom": 19
+        },
+        "terrain-source": {
+            "type": "raster-dem",
+            "tiles": [
+                "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
+            ],
+            "tileSize": 256,
+            "attribution": "Terrain data &copy; AWS Terrain Tiles",
+            "maxzoom": 15
         }
     },
     "layers": [
@@ -19,5 +28,9 @@
             "type": "raster",
             "source": "basemap"
         }
-    ]
+    ],
+    "terrain": {
+        "source": "terrain-source",
+        "exaggeration": 0.15
+    }
 }

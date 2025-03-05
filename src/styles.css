@@ -10,3 +10,69 @@ body {
     width: 100%;
     height: 100%;
 }
+
+.basemap-control {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    background-color: white;
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.basemap-control select {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.basemap-control select:focus {
+    outline: none;
+    border-color: #0078ff;
+}
+
+.basemap-control option {
+    padding: 5px;
+}
+
+.exaggeration-control {
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+    z-index: 1;
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    display: none; /* Nascosto di default, mostrato solo quando il terreno è attivo */
+}
+
+.exaggeration-control input[type="range"] {
+    width: 100%;
+    margin-top: 5px;
+}
+
+#exaggeration-value {
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* Stile per il controllo personalizzato del terreno */
+.custom-terrain-control {
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    display: block;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
