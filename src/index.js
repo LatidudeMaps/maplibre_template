@@ -1,7 +1,7 @@
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './styles.css';
-import style from './src/style.json';
+import style from './style.json';
 
 document.addEventListener('DOMContentLoaded', () => {
     const map = new maplibregl.Map({
