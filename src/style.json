@@ -1,0 +1,23 @@
+{
+    "version": 8,
+    "glyphs": "https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/fonts/{fontstack}/{range}.pbf",
+    "sprite": "https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/sprites/sprite",
+    "sources": {
+        "basemap": {
+            "type": "raster",
+            "tiles": [
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            ],
+            "tileSize": 256,
+            "attribution": "&copy; ESRI ArcGIS World Imagery",
+            "maxzoom": 19
+        }
+    },
+    "layers": [
+        {
+            "id": "basemap",
+            "type": "raster",
+            "source": "basemap"
+        }
+    ]
+}
