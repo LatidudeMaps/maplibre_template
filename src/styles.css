@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    transition: background-color 0.3s ease;
 }
 
 #map {
@@ -22,6 +23,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     font-size: 14px;
+    transition: all 0.3s ease;
 }
 
 .basemap-control select {
@@ -31,6 +33,7 @@ body {
     border-radius: 3px;
     background-color: white;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .basemap-control select:focus {
@@ -54,6 +57,7 @@ body {
     font-family: Arial, sans-serif;
     font-size: 14px;
     display: none; /* Nascosto di default, mostrato solo quando il terreno è attivo */
+    transition: all 0.3s ease;
 }
 
 .exaggeration-control input[type="range"] {
@@ -75,4 +79,316 @@ body {
     width: 30px;
     height: 30px;
     padding: 0;
+    transition: background-color 0.3s ease;
+}
+
+/* Stile per il controllo del tema */
+.maplibregl-ctrl-theme-toggle {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="5"/%3E%3Cline x1="12" y1="1" x2="12" y2="3"/%3E%3Cline x1="12" y1="21" x2="12" y2="23"/%3E%3Cline x1="4.22" y1="4.22" x2="5.64" y2="5.64"/%3E%3Cline x1="18.36" y1="18.36" x2="19.78" y2="19.78"/%3E%3Cline x1="1" y1="12" x2="3" y2="12"/%3E%3Cline x1="21" y1="12" x2="23" y2="12"/%3E%3Cline x1="4.22" y1="19.78" x2="5.64" y2="18.36"/%3E%3Cline x1="18.36" y1="5.64" x2="19.78" y2="4.22"/%3E%3C/svg%3E');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+
+.maplibregl-ctrl-theme-toggle.dark {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/%3E%3C/svg%3E');
+    background-color: #333;
+}
+
+/* Stile per il controllo delle impostazioni */
+.maplibregl-ctrl-settings {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="3"/%3E%3Cpath d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/%3E%3C/svg%3E');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.maplibregl-ctrl-settings.active {
+    transform: rotate(180deg);
+    background-color: rgba(51, 181, 229, 0.1);
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2333b5e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="3"/%3E%3Cpath d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/%3E%3C/svg%3E');
+}
+
+/* Stile per il controllo delle info */
+.maplibregl-ctrl-zoom-info {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3Cline x1="2" y1="12" x2="22" y2="12"/%3E%3Cline x1="12" y1="2" x2="12" y2="22"/%3E%3C/svg%3E');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+
+.maplibregl-ctrl-zoom-info.active {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2333b5e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3Cline x1="2" y1="12" x2="22" y2="12"/%3E%3Cline x1="12" y1="2" x2="12" y2="22"/%3E%3C/svg%3E');
+    background-color: rgba(51, 181, 229, 0.1);
+}
+
+/* Stili per i controlli nel pannello settings */
+.settings-controls-container .maplibregl-ctrl {
+    width: 30px;
+    margin: 0;
+}
+
+.settings-controls-container button {
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 0;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.settings-controls-container button:hover {
+    background-color: #f0f0f0;
+}
+
+.settings-controls-container button.active {
+    background-color: rgba(51, 181, 229, 0.1);
+}
+
+.settings-controls-container .maplibregl-ctrl-profile.active {
+    background-color: rgba(51, 181, 229, 0.1);
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2333b5e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M2 12h6l3-9 3 18 3-9h5"/%3E%3C/svg%3E');
+}
+
+/* Copyright panel styles */
+.copyright-panel {
+    position: relative;
+    overflow: visible;
+    padding: 8px 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 300px;
+}
+
+.copyright-main-text {
+    font-weight: 500;
+    color: #1a1a1a;
+    transition: color 0.3s ease;
+}
+
+.copyright-author-text,
+.copyright-text {
+    color: #666666;
+    font-size: 11px;
+    transition: color 0.3s ease;
+}
+
+.map-info-panel {
+    padding: 10px;
+    min-width: 220px;
+    background-color: white;
+    font-family: monospace;
+    font-size: 12px;
+    position: absolute;
+    right: 40px;
+    bottom: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* TEMA SCURO - Centralizzato */
+.dark-theme {
+    color-scheme: dark;
+}
+
+/* Controlli di navigazione */
+.dark-theme .maplibregl-ctrl-group {
+    background-color: #333;
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+}
+
+.dark-theme .maplibregl-ctrl-group button {
+    background-color: #333;
+    border-radius: 4px;
+}
+
+.dark-theme .maplibregl-ctrl-group button + button {
+    border-top: 1px solid #555;
+}
+
+.dark-theme .maplibregl-ctrl-group button:hover {
+    background-color: #444;
+}
+
+.dark-theme .maplibregl-ctrl-group button.active {
+    background-color: rgba(51, 181, 229, 0.3);
+}
+
+.dark-theme .maplibregl-ctrl-group button svg path,
+.dark-theme .maplibregl-ctrl-group button svg line,
+.dark-theme .maplibregl-ctrl-group button svg polyline,
+.dark-theme .maplibregl-ctrl-group button svg rect,
+.dark-theme .maplibregl-ctrl-group button svg circle,
+.dark-theme .maplibregl-ctrl-group button svg polygon {
+    stroke: #fff;
+}
+
+.dark-theme .maplibregl-ctrl-compass .maplibregl-ctrl-compass-arrow {
+    fill: #fff;
+}
+
+/* Filtri standardizzati per le icone */
+.dark-theme .maplibregl-ctrl-icon {
+    filter: invert(1) brightness(1.2);
+}
+
+/* Eccezioni per icone specifiche */
+.dark-theme .maplibregl-ctrl-theme-toggle {
+    filter: none;
+}
+
+.dark-theme .maplibregl-ctrl-theme-toggle.dark {
+    background-color: #333;
+}
+
+.dark-theme .maplibregl-ctrl-settings {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="3"/%3E%3Cpath d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/%3E%3C/svg%3E');
+    filter: none;
+}
+
+.dark-theme .maplibregl-ctrl-settings.active {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2333b5e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="3"/%3E%3Cpath d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/%3E%3C/svg%3E');
+    background-color: rgba(51, 181, 229, 0.2);
+    filter: none;
+}
+
+.dark-theme .maplibregl-ctrl-zoom-info {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3Cline x1="2" y1="12" x2="22" y2="12"/%3E%3Cline x1="12" y1="2" x2="12" y2="22"/%3E%3C/svg%3E');
+    filter: none;
+}
+
+.dark-theme .maplibregl-ctrl-zoom-info.active {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2333b5e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3Cline x1="2" y1="12" x2="22" y2="12"/%3E%3Cline x1="12" y1="2" x2="12" y2="22"/%3E%3C/svg%3E');
+    background-color: rgba(51, 181, 229, 0.2);
+    filter: none;
+}
+
+/* Rimuovere tutti i filtri in conflitto prima di procedere */
+.dark-theme .maplibregl-ctrl-geolocate .maplibregl-ctrl-icon,
+.dark-theme .maplibregl-ctrl-terrain .maplibregl-ctrl-icon {
+    filter: invert(100%);
+}
+
+.dark-theme .maplibregl-ctrl-geolocate.maplibregl-ctrl-geolocate-active .maplibregl-ctrl-icon,
+.dark-theme .maplibregl-ctrl-terrain.maplibregl-ctrl-terrain-active .maplibregl-ctrl-icon {
+    filter: invert(53%) sepia(94%) saturate(1752%) hue-rotate(165deg) brightness(101%) contrast(96%);
+    background-color: transparent;
+}
+
+/* Rimozione del quadrato semitrasparente per le icone rotanti nel tema scuro */
+.dark-theme .maplibregl-ctrl-geolocate.maplibregl-ctrl-geolocate-active .maplibregl-ctrl-icon,
+.dark-theme .maplibregl-ctrl-settings.active {
+    background-color: transparent !important;
+}
+
+/* Styling specifico per l'icona del settings control nel tema scuro */
+.dark-theme .maplibregl-ctrl-settings.active {
+    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2333b5e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="3"/%3E%3Cpath d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/%3E%3C/svg%3E');
+}
+
+/* Stili per popups */
+.dark-theme .mapboxgl-popup-content, 
+.dark-theme .maplibregl-popup-content {
+    background-color: #333;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .mapboxgl-popup-tip,
+.dark-theme .maplibregl-popup-tip {
+    border-top-color: #333;
+    border-bottom-color: #333;
+}
+
+.dark-theme .mapboxgl-popup-close-button,
+.dark-theme .maplibregl-popup-close-button {
+    color: #fff;
+}
+
+/* Pannello Settings nel tema scuro */
+.dark-theme .settings-controls-container button {
+    background-color: #333;
+}
+
+.dark-theme .settings-controls-container button:hover {
+    background-color: #444;
+}
+
+.dark-theme .settings-controls-container button.active {
+    background-color: rgba(51, 181, 229, 0.2);
+}
+
+/* Copyright control nel tema scuro */
+.dark-theme .copyright-panel {
+    background-color: rgba(51, 51, 51, 0.5);
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .copyright-panel::after {
+    display: none;
+}
+
+.dark-theme .copyright-main-text {
+    color: #fff;
+}
+
+.dark-theme .copyright-author-text,
+.dark-theme .copyright-text {
+    color: #aaa;
+}
+
+/* MapInfo nel tema scuro */
+.dark-theme .map-info-panel {
+    background-color: #333;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Altri elementi nel tema scuro */
+/* Stile del bottone per il minimap */
+.minimap-toggle-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.dark-theme .minimap-toggle-btn {
+    background-color: #333;
+}
+
+.dark-theme .minimap-toggle-btn svg {
+    stroke: white;
+}
+
+.dark-theme .logo-svg path,
+.dark-theme .logo-svg circle,
+.dark-theme .logo-svg rect {
+    fill: #ffffff;
 }
