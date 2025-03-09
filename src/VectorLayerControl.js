@@ -93,6 +93,23 @@ class VectorLayerControl {
             const style = document.createElement('style');
             style.id = 'vector-layer-control-styles';
             style.innerHTML = `
+                /* Applica il font "Source Sans 3" a tutti gli elementi del controllo */
+                .vector-layer-dropdown,
+                .vector-layer-option,
+                .vector-layer-message,
+                .vector-layer-dialog,
+                .vector-layer-dialog h3,
+                .vector-layer-dialog input,
+                .vector-layer-dialog select,
+                .vector-layer-dialog textarea,
+                .vector-layer-dialog button,
+                .layer-item,
+                .layer-item button,
+                .maplibregl-popup-content,
+                .layer-empty {
+                    font-family: "Source Sans 3", "Helvetica Neue", Arial, Helvetica, sans-serif;
+                }
+                
                 .vector-layer-dropdown {
                     position: absolute;
                     right: 0;
@@ -731,13 +748,13 @@ class VectorLayerControl {
             if (!properties) return;
             
             // Crea HTML per le proprietà
-            let html = '<div style="max-height: 200px; overflow-y: auto;">';
+            let html = '<div style="max-height: 200px; overflow-y: auto; font-family: \'Source Sans 3\', \'Helvetica Neue\', Arial, Helvetica, sans-serif;">';
             html += '<table style="border-collapse: collapse; width: 100%;">';
             
             Object.keys(properties).forEach(key => {
                 if (key !== 'lat' && key !== 'lon' && key !== 'longitude' && key !== 'latitude') {
                     html += `<tr>
-                        <td style="padding: 4px; border-bottom: 1px solid #eee; font-weight: bold;">${key}</td>
+                        <td style="padding: 4px; border-bottom: 1px solid #eee; font-weight: 500;">${key}</td>
                         <td style="padding: 4px; border-bottom: 1px solid #eee;">${properties[key]}</td>
                     </tr>`;
                 }
