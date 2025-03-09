@@ -53,7 +53,7 @@ class BasemapSelector {
             },
             { 
                 id: 'terrain', 
-                title: 'Terreno'
+                title: 'Topographic'
             }
         ];
         

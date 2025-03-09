@@ -11,6 +11,8 @@ import MinimapControl from './MinimapControls';
 import ThemeToggleControl from './ThemeToggle';
 // Import del selettore di basemap
 import BasemapSelector from './BasemapSelector';
+// Import del controllo per i layer vettoriali
+import VectorLayerControl from './VectorLayerControl';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Controlla se è stato salvato un tema e applicalo
@@ -34,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Quando la mappa è caricata, aggiungi i controlli
+    // L'ordine di aggiunta rispecchierà l'ordine con cui i controlli sono inseriti nella mappa (dall'alto verso il basso)
     map.once('style.load', () => {
         // Aggiungi i controlli standard
         map.addControl(new CopyrightControl(), 'top-left');
@@ -41,8 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
         map.addControl(new maplibregl.NavigationControl(), 'top-right');
         map.addControl(new ThemeToggleControl(), 'top-right');
         map.addControl(new maplibregl.GlobeControl(), 'top-right');
+
+        // Aggiungi il controllo per i layer vettoriali
+        map.addControl(new VectorLayerControl({
+            position: 'top-right',
+            supportedFormats: ['csv', 'geojson', 'json', 'gpx', 'kml']
+        }), 'top-right');
+        
         map.addControl(new SettingsControl(), 'top-right');
         map.addControl(new maplibregl.ScaleControl(), 'bottom-left');
+        
+
     });
     
     // Crea il selettore di basemap (non è necessario aggiungerlo come controllo)
