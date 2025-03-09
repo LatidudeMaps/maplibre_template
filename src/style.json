@@ -3,13 +3,31 @@
     "glyphs": "https://raw.githubusercontent.com/latidudemaps/maplibre_template/main/data/fonts/{fontstack}/{range}.pbf",
     "sprite": "https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/sprites/sprite",
     "sources": {
-        "basemap": {
+        "satellite": {
             "type": "raster",
             "tiles": [
                 "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             ],
             "tileSize": 256,
             "attribution": "&copy; ESRI ArcGIS World Imagery",
+            "maxzoom": 19
+        },
+        "osm": {
+            "type": "raster",
+            "tiles": [
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            ],
+            "tileSize": 256,
+            "attribution": "&copy; OpenStreetMap contributors",
+            "maxzoom": 19
+        },
+        "terrain": {
+            "type": "raster",
+            "tiles": [
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+            ],
+            "tileSize": 256,
+            "attribution": "&copy; ESRI World Topographic Map",
             "maxzoom": 19
         },
         "terrain-source": {
@@ -24,9 +42,28 @@
     },
     "layers": [
         {
-            "id": "basemap",
+            "id": "satellite",
             "type": "raster",
-            "source": "basemap"
+            "source": "satellite",
+            "layout": {
+                "visibility": "visible"
+            }
+        },
+        {
+            "id": "osm",
+            "type": "raster",
+            "source": "osm",
+            "layout": {
+                "visibility": "none"
+            }
+        },
+        {
+            "id": "terrain",
+            "type": "raster",
+            "source": "terrain",
+            "layout": {
+                "visibility": "none"
+            }
         }
     ],
     "terrain": {

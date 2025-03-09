@@ -35,17 +35,21 @@ class MinimapControl {
         minimapWrapper.style.WebkitBackdropFilter = 'blur(8px)';
         minimapWrapper.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
         
-        // Add toggle button (con dimensioni ridotte)
+        // Add toggle button con dimensioni ridotte
         const toggleButton = document.createElement('button');
         toggleButton.className = 'minimap-toggle-btn';
-        toggleButton.style.width = '20px';
-        toggleButton.style.height = '20px';
+        toggleButton.style.width = '26px';  // Dimensione del bottone
+        toggleButton.style.height = '26px'; 
+        toggleButton.style.display = 'flex';
+        toggleButton.style.alignItems = 'center';    // Centra l'icona verticalmente
+        toggleButton.style.justifyContent = 'center'; // Centra l'icona orizzontalmente
         this._toggleButton = toggleButton;
 
-        // Define both icons for minimize and maximize (con dimensioni ridotte)
+        // Define both icons for minimize and maximize con icone ancora più piccole (8px)
         const minimizeIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" 
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" 
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                style="min-width: 8px; min-height: 8px; max-width: 18px; max-height: 18px;">
                 <polyline points="4 14 10 14 10 20"></polyline>
                 <polyline points="20 10 14 10 14 4"></polyline>
                 <line x1="14" y1="10" x2="21" y2="3"></line>
@@ -54,8 +58,9 @@ class MinimapControl {
         `;
 
         const maximizeIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" 
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" 
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                style="min-width: 8px; min-height: 8px; max-width: 18px; max-height: 18px;">
                 <polyline points="15 3 21 3 21 9"></polyline>
                 <polyline points="9 21 3 21 3 15"></polyline>
                 <line x1="21" y1="3" x2="14" y2="10"></line>
@@ -132,7 +137,7 @@ class MinimapControl {
     }
 
     _initMinimap(container) {
-        // Create a separate style for the minimap with OpenTopoMap tiles and GeoJSON
+        // Il resto del codice rimane invariato
         const minimapStyle = {
             version: 8,
             sources: {
@@ -191,6 +196,7 @@ class MinimapControl {
     }
 
     _updateMinimap() {
+        // Il resto del codice rimane invariato
         if (!this._minimap || !this._mainMap) return;
     
         this._minimap.setCenter(this._mainMap.getCenter());

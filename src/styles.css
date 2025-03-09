@@ -178,18 +178,134 @@ margin-bottom: 5px !important;
 
 /* Pannello info mappa */
 .map-info-panel {
-  padding: var(--spacing-md);
-  min-width: 220px;
+  padding: 8px;
+  min-width: 160px;
+  max-width: 280px;
   background-color: rgb(var(--ml-c-bg-1));
   color: rgb(var(--ml-c-icon-1));
   font-family: var(--ml-font);
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   right: 40px;
   bottom: 0;
   border-radius: var(--ml-ctrl-border-radius);
-  box-shadow: var(--ml-shadow);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: var(--ml-shadow-popup);
+  transition: var(--transition-smooth);
+  z-index: 100;
+}
+
+/* Container principale */
+.map-info-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Sezioni del pannello */
+.map-info-section {
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+
+/* Sezione della vista (zoom, bearing, pitch) */
+.map-view-section {
+  background-color: rgba(var(--ml-c-active), 0.07);
+  border-left: 3px solid rgb(var(--ml-c-active));
+}
+
+/* Stile per zoom (informazione primaria) */
+.map-info-primary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.zoom-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(var(--ml-c-active));
+}
+
+/* Stile per bearing e pitch (informazioni secondarie) */
+.map-info-secondary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bearing-value, .pitch-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Sezione coordinate */
+.map-coords-section {
+  background-color: rgba(var(--ml-c-icon-1), 0.03);
+  border-left: 3px solid rgba(var(--ml-c-icon-1), 0.2);
+}
+
+/* Label per le coordinate */
+.coords-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(var(--ml-c-icon-1), 0.6);
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+/* Container per le coordinate SW e NE */
+.coords-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Singola riga di coordinate */
+.coord-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Label per coordinate SW e NE */
+.coord-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(var(--ml-c-icon-1), 0.7);
+  width: 20px;
+}
+
+/* Valori delle coordinate */
+.coord-value {
+  font-family: monospace;
+  font-size: 11px;
+  color: rgba(var(--ml-c-icon-1), 0.9);
+}
+
+/* Stile per le chiavi */
+.info-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 3px;
+  background-color: rgba(var(--ml-c-icon-1), 0.1);
+  color: rgba(var(--ml-c-icon-1), 0.8);
+  margin-right: 3px;
+}
+
+/* Separatore inline */
+.separator {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(var(--ml-c-icon-1), 0.3);
+  margin: 0 4px;
 }
 
 /* Bottone toggle minimap */
@@ -246,6 +362,20 @@ margin-bottom: 5px !important;
     font-size: 11px;
     min-width: 180px;
   }
+
+  .map-info-panel {
+    right: 10px;
+    font-size: 12px;
+    min-width: 220px;
+  }
+  
+  .map-info-title {
+    font-size: 14px;
+  }
+  
+  .map-info-value {
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -256,9 +386,21 @@ margin-bottom: 5px !important;
   
   .map-info-panel {
     right: 5px;
-    font-size: 10px;
-    min-width: 150px;
-    padding: 5px;
+    bottom: 5px;
+    min-width: 160px;
+    padding: 6px;
+  }
+  
+  .zoom-value {
+    font-size: 15px;
+  }
+  
+  .bearing-value, .pitch-value {
+    font-size: 12px;
+  }
+  
+  .map-info-main {
+    gap: 4px;
   }
 }
 

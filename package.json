@@ -15,6 +15,7 @@
   "author": "LatidudeMaps",
   "license": "MIT",
   "dependencies": {
+    "@watergis/maplibre-gl-export": "^4.0.0",
     "maplibre-gl": "^5.2.0",
     "maplibre-theme": "^0.2.1"
   },
