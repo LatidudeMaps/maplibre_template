@@ -7,18 +7,23 @@
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production"
   },
-  "keywords": ["map", "maplibre", "gis"],
+  "keywords": [
+    "map",
+    "maplibre",
+    "gis"
+  ],
   "author": "LatidudeMaps",
   "license": "MIT",
   "dependencies": {
-    "maplibre-gl": "^3.0.0"
+    "maplibre-gl": "^5.2.0",
+    "maplibre-theme": "^0.2.1"
   },
   "devDependencies": {
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.2",
     "webpack": "^5.77.0",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.13.2",
-    "html-webpack-plugin": "^5.5.0",
-    "css-loader": "^6.7.3",
-    "style-loader": "^3.3.2"
+    "webpack-dev-server": "^4.13.2"
   }
 }

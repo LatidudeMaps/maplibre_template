@@ -19,7 +19,7 @@ class MapInfoControl {
         this._button.className = 'maplibregl-ctrl-icon maplibregl-ctrl-zoom-info';
         this._button.setAttribute('title', 'Show map coordinates and bounds');
         
-        // Create info box
+        // Create info box - la aggiungiamo direttamente al container del controllo
         this._panel = document.createElement('div');
         this._panel.className = 'map-info-panel';
         this._panel.style.display = 'none';
@@ -57,16 +57,12 @@ class MapInfoControl {
         map.on('rotate', updateInfo);
         map.on('pitch', updateInfo);
         
-        // Ascolto l'evento personalizzato di cambio tema
-        document.addEventListener(THEME_CHANGE_EVENT, () => {
-            // Non è necessario fare nulla qui perché gli stili CSS gestiscono tutto
-        });
-        
         // Initial update
         updateInfo();
         
         this._container.appendChild(this._button);
-        this._container.appendChild(this._panel);
+        this._container.appendChild(this._panel); // Aggiungiamo il pannello al container del controllo
+        
         return this._container;
     }
 
@@ -81,11 +77,10 @@ class MapInfoControl {
     }
 
     onRemove() {
-        // Rimuovi event listener del tema
-        document.removeEventListener(THEME_CHANGE_EVENT, () => {});
-        
-        // Rimuovi il container
-        this._container.parentNode.removeChild(this._container);
+        // Rimuovi il container (che include anche il pannello)
+        if (this._container.parentNode) {
+            this._container.parentNode.removeChild(this._container);
+        }
         this._map = null;
     }
 }

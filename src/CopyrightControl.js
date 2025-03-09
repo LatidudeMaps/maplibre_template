@@ -6,9 +6,8 @@ class CopyrightControl {
         this._map = null;
         this._logo = null;
         this._panel = null;
-        this._themeHandler = this._updateTheme.bind(this);
         this._links = [];
-        this._logoElement = null; // Referenza all'elemento SVG per aggiornamenti tema
+        this._logoElement = null; // Referenza all'elemento SVG
     }
 
     onAdd(map) {
@@ -17,7 +16,7 @@ class CopyrightControl {
         this._container.className = 'maplibregl-ctrl';
         this._container.style.pointerEvents = 'auto';
         
-        // Create copyright panel senza effetti di trasparenza o blur
+        // Create copyright panel
         this._panel = document.createElement('div');
         this._panel.className = 'copyright-panel';
         
@@ -37,8 +36,8 @@ class CopyrightControl {
         this._logoContainer.style.justifyContent = 'center';
         wrapper.appendChild(this._logoContainer);
 
-        // Carica il logo con il colore appropriato al tema
-        this._loadThemeAwareLogo();
+        // Carica il logo (sempre lo stesso, indipendentemente dal tema)
+        this._loadLogo();
 
         // Add text container
         const textContainer = document.createElement('div');
@@ -58,7 +57,7 @@ class CopyrightControl {
 
         wrapper.appendChild(textContainer);
 
-        // Add expanded content senza animazioni di trasformazione
+        // Add expanded content
         const expandedContent = document.createElement('div');
         expandedContent.style.marginTop = '0';
         expandedContent.style.maxHeight = '0';
@@ -92,12 +91,9 @@ class CopyrightControl {
         // Memorizza il riferimento al contenuto espanso
         this._expandedContent = expandedContent;
 
-        // Add hover effects senza cambiamenti di trasparenza o blur
+        // Add hover effects
         this._panel.addEventListener('mouseenter', () => {
-            // Evita cambiamenti di trasparenza, usa colori solidi invece
-            this._panel.style.backgroundColor = document.body.classList.contains('dark-theme') 
-                ? '#333333' 
-                : '#ffffff';
+            this._panel.style.transform = 'scale(1.02)';
             expandedContent.style.marginTop = '8px';
             expandedContent.style.maxHeight = '200px';
             expandedContent.style.opacity = '1';
@@ -110,10 +106,7 @@ class CopyrightControl {
         });
 
         this._panel.addEventListener('mouseleave', () => {
-            // Ripristina colori solidi nello stato originale
-            this._panel.style.backgroundColor = document.body.classList.contains('dark-theme')
-                ? '#333333' 
-                : '#ffffff';
+            this._panel.style.transform = 'scale(1)';
             expandedContent.style.marginTop = '0';
             expandedContent.style.maxHeight = '0';
             expandedContent.style.opacity = '0';
@@ -125,12 +118,6 @@ class CopyrightControl {
             }
         });
 
-        // Ascolto per i cambiamenti del tema
-        document.addEventListener(THEME_CHANGE_EVENT, this._themeHandler);
-        
-        // Inizializza lo stato del tema
-        this._updateTheme();
-
         this._panel.appendChild(wrapper);
         this._panel.appendChild(expandedContent);
         this._container.appendChild(this._panel);
@@ -138,73 +125,10 @@ class CopyrightControl {
         return this._container;
     }
 
-    _updateTheme() {
-        const isDarkTheme = document.body.classList.contains('dark-theme');
-        
-        // Usa colori solidi invece di trasparenze
-        if (this._panel) {
-            this._panel.style.backgroundColor = isDarkTheme 
-                ? '#333333' 
-                : '#ffffff';
-            // Mantieni un'ombra sottile ma non troppo sfumata
-            this._panel.style.boxShadow = isDarkTheme
-                ? '0 2px 4px rgba(0, 0, 0, 0.4)'
-                : '0 2px 4px rgba(0, 0, 0, 0.2)';
-        }
-        
-        // Imposta l'elemento main-text
-        const mainText = this._panel.querySelector('.copyright-main-text');
-        if (mainText) {
-            mainText.style.color = isDarkTheme ? '#ffffff' : '#1a1a1a';
-        }
-        
-        // Imposta l'elemento author-text
-        const authorText = this._panel.querySelector('.copyright-author-text');
-        if (authorText) {
-            authorText.style.color = isDarkTheme ? '#bbbbbb' : '#666666';
-        }
-        
-        // Imposta il copyright-text
-        const copyrightText = this._panel.querySelector('.copyright-text');
-        if (copyrightText) {
-            copyrightText.style.color = isDarkTheme ? '#bbbbbb' : '#666666';
-        }
-
-        // Aggiorna il bordo del contenuto espanso con un colore solido
-        if (this._expandedContent) {
-            this._expandedContent.style.borderTop = isDarkTheme
-                ? '1px solid #444444'
-                : '1px solid #dddddd';
-        }
-        
-        // Aggiorna tutti i link salvati
-        this._links.forEach(link => {
-            link.style.color = isDarkTheme ? '#bbbbbb' : '#666666';
-            
-            // Aggiorna hover/leave eventi con un semplice cambiamento di colore
-            link.onmouseenter = () => {
-                link.style.color = isDarkTheme ? '#ffffff' : '#000000';
-                link.style.paddingLeft = '4px'; // Usa padding invece di transform
-            };
-            
-            link.onmouseleave = () => {
-                link.style.color = isDarkTheme ? '#bbbbbb' : '#666666';
-                link.style.paddingLeft = '0';
-            };
-        });
-        
-        // Aggiorna il logo in base al tema
-        this._loadThemeAwareLogo();
-    }
-
-    async _loadThemeAwareLogo() {
-        const isDarkTheme = document.body.classList.contains('dark-theme');
-        
+    async _loadLogo() {
         try {
-            // Scegli l'URL del logo in base al tema
-            const logoUrl = isDarkTheme 
-                ? 'https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/logo_color.svg'  // Versione bianca (per tema scuro) cambiare in logo_dark.svg se si vuole quello scuro
-                : 'https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/logo_color.svg';  // Versione scura (per tema chiaro)
+            // URL fisso del logo, indipendentemente dal tema
+            const logoUrl = 'https://raw.githubusercontent.com/latidudemaps/GeologiaVDA/main/data/logo_color.svg';
                 
             const response = await fetch(logoUrl);
             if (!response.ok) {
@@ -259,7 +183,6 @@ class CopyrightControl {
         link.style.alignItems = 'center';
         link.style.gap = '8px';
         link.style.textDecoration = 'none';
-        link.style.color = document.body.classList.contains('dark-theme') ? '#bbbbbb' : '#666666';
         link.style.padding = '4px 0';
         link.style.transition = 'all 0.2s ease';
         
@@ -271,6 +194,8 @@ class CopyrightControl {
         const textSpan = document.createElement('span');
         textSpan.textContent = text;
         link.appendChild(textSpan);
+        
+        // Gli stili di colore sono gestiti dalle classi CSS
         
         return link;
     }
@@ -307,9 +232,6 @@ class CopyrightControl {
     }
 
     onRemove() {
-        // Rimuovi l'event listener del tema
-        document.removeEventListener(THEME_CHANGE_EVENT, this._themeHandler);
-        
         if (this._container.parentNode) {
             this._container.parentNode.removeChild(this._container);
         }

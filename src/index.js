@@ -1,11 +1,17 @@
 import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+// Rimuoviamo l'import del CSS originale di maplibre-gl
+// import 'maplibre-gl/dist/maplibre-gl.css';
+// Aggiungiamo gli import per maplibre-theme
+import 'maplibre-theme/icons.default.css';
+import 'maplibre-theme/classic.css';
 import './styles.css';
 import style from './style.json';
 import CopyrightControl from './CopyrightControl';
 import SettingsControl from './SettingsControl';
 import MinimapControl from './MinimapControls';
 import ThemeToggleControl from './ThemeToggle';
+// import LayerManager from './LayerManager';
+// import FileLoaderControl from './FileLoaderControl';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Controlla se è stato salvato un tema e applicalo subito 
@@ -16,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // come predefinito e lo salviamo in localStorage
     if (!storedTheme || storedTheme === 'light') {
         localStorage.setItem('mapTheme', 'dark');
-        document.body.classList.add('dark-theme');
+        document.body.classList.add('dark'); // Usiamo solo la classe 'dark' di MapLibre
     } else if (storedTheme === 'dark') {
         // Se è già dark, assicuriamoci che la classe sia applicata
-        document.body.classList.add('dark-theme');
+        document.body.classList.add('dark');
     }
    
     // Crea la mappa con lo stile
@@ -32,22 +38,27 @@ document.addEventListener('DOMContentLoaded', () => {
         maxPitch: 85
     });
 
-    // Aggiunta controlli di navigazione
-    map.addControl(new maplibregl.NavigationControl(), 'top-right');
-    map.addControl(new maplibregl.ScaleControl(), 'bottom-left');
-    
-    // Aggiungi il controllo per il tema
-    map.addControl(new ThemeToggleControl(), 'top-right');
-       
-    // Quando la mappa è caricata, aggiungi gli altri controlli
+    // Quando la mappa è caricata, aggiungi i controlli
     map.once('style.load', () => {
-        // Add copyright control
+        // Aggiungi il copyright control
         map.addControl(new CopyrightControl(), 'top-left');
-
-        // Add settings control
-        map.addControl(new SettingsControl(), 'top-right');
-
-        // Add minimap control
+        
+        // Aggiungi il minimap control
         map.addControl(new MinimapControl(), 'top-left');
+        
+        // Aggiungi i controlli di navigazione nella parte superiore destra
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+        
+        // Aggiungi il theme toggle control
+        map.addControl(new ThemeToggleControl(), 'top-right');
+
+        // Aggiungi il globe toggle control
+        map.addControl(new maplibregl.GlobeControl(), 'top-right');
+        
+        // Aggiungi il settings control per ultimo, così sarà in fondo
+        map.addControl(new SettingsControl(), 'top-right');
+        
+        // Aggiungi la scala in basso a sinistra
+        map.addControl(new maplibregl.ScaleControl(), 'bottom-left');
     });
 });

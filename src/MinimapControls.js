@@ -35,14 +35,16 @@ class MinimapControl {
         minimapWrapper.style.WebkitBackdropFilter = 'blur(8px)';
         minimapWrapper.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
         
-        // Add toggle button
+        // Add toggle button (con dimensioni ridotte)
         const toggleButton = document.createElement('button');
         toggleButton.className = 'minimap-toggle-btn';
+        toggleButton.style.width = '20px';
+        toggleButton.style.height = '20px';
         this._toggleButton = toggleButton;
 
-        // Define both icons for minimize and maximize
+        // Define both icons for minimize and maximize (con dimensioni ridotte)
         const minimizeIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" 
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" 
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="4 14 10 14 10 20"></polyline>
                 <polyline points="20 10 14 10 14 4"></polyline>
@@ -52,7 +54,7 @@ class MinimapControl {
         `;
 
         const maximizeIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" 
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" 
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 3 21 3 21 9"></polyline>
                 <polyline points="9 21 3 21 3 15"></polyline>
@@ -67,12 +69,12 @@ class MinimapControl {
 
         // Add hover effect
         toggleButton.addEventListener('mouseover', () => {
-            toggleButton.style.backgroundColor = document.body.classList.contains('dark-theme') ? 
+            toggleButton.style.backgroundColor = document.body.classList.contains('dark') ? 
                 '#444' : '#f0f0f0';
         });
         
         toggleButton.addEventListener('mouseout', () => {
-            toggleButton.style.backgroundColor = document.body.classList.contains('dark-theme') ? 
+            toggleButton.style.backgroundColor = document.body.classList.contains('dark') ? 
                 '#333' : 'white';
         });
 
@@ -100,7 +102,7 @@ class MinimapControl {
     }
 
     _updateTheme() {
-        const isDarkTheme = document.body.classList.contains('dark-theme');
+        const isDarkTheme = document.body.classList.contains('dark');
         if (!this._toggleButton) return;
         
         // Imposta il colore di sfondo corretto

@@ -37,14 +37,14 @@ class SettingsControl {
         this._controlsContainer.style.position = 'absolute';
         this._controlsContainer.style.right = '0';
         this._controlsContainer.style.top = '100%';
-        this._controlsContainer.style.marginTop = '10px';
+        this._controlsContainer.style.marginTop = '5px'; // Ridotto da 10px a 5px
         this._controlsContainer.style.display = 'flex';
         this._controlsContainer.style.flexDirection = 'column';
-        this._controlsContainer.style.gap = '5px';
+        // this._controlsContainer.style.gap = '5px';
         this._controlsContainer.style.zIndex = '1';
         this._controlsContainer.style.visibility = 'hidden';
         this._controlsContainer.style.opacity = '0';
-        this._controlsContainer.style.transform = 'translateY(-10px)';
+        this._controlsContainer.style.transform = 'translateY(-5px)'; // Ridotto da -10px a -5px
         this._controlsContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
         
         // Add click handler for main settings button
@@ -67,11 +67,6 @@ class SettingsControl {
             this._updateThemeStyles();
         });
         
-        // Initial theme check
-        if (document.body.classList.contains('dark-theme')) {
-            this._updateThemeStyles();
-        }
-        
         this._container.appendChild(this._button);
         this._container.appendChild(this._controlsContainer);
         
@@ -82,7 +77,6 @@ class SettingsControl {
 
     _updateThemeStyles() {
         // Non dobbiamo fare niente, gli stili CSS gestiscono tutto
-        // Questo metodo è mantenuto per eventuali futuri aggiornamenti di stato che potrebbero essere necessari
     }
 
     _addWrappedControls(map) {
@@ -109,6 +103,11 @@ class SettingsControl {
             controlContainer.style.position = 'relative';
             controlContainer.style.marginBottom = '5px';
             controlContainer.style.display = 'block';
+            
+            // Correggiamo la dimensione per tutti i controlli
+            if (controlContainer.classList.contains('maplibregl-ctrl-group')) {
+                controlContainer.style.margin = '0';
+            }
 
             // Find the button and associated panel within the control container
             const button = controlContainer.querySelector('button');
@@ -172,7 +171,7 @@ class SettingsControl {
 
     _hideControls() {
         this._controlsContainer.style.opacity = '0';
-        this._controlsContainer.style.transform = 'translateY(-10px)';
+        this._controlsContainer.style.transform = 'translateY(-5px)';  // Ridotto da -10px a -5px
         this._button.classList.remove('active');
         this._isExpanded = false;
         
