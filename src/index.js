@@ -13,8 +13,8 @@ import ThemeToggleControl from './ThemeToggle';
 import BasemapSelector from './BasemapSelector';
 // Import del controllo per i layer vettoriali
 import VectorLayerControl from './VectorLayerControl';
-// Import del modulo di ottimizzazione mobile
-import { applyMobileOptimizations, isMobileDevice } from './mobile-optimization';
+// Import del controllo per il Layer Panel
+import LayerPanelControl from './LayerPanelControl';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Controlla se è stato salvato un tema e applicalo
@@ -48,9 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
         map.addControl(new maplibregl.GlobeControl(), 'top-right');
 
         // Aggiungi il controllo per i layer vettoriali
-        map.addControl(new VectorLayerControl({
+        const vectorLayerControl = new VectorLayerControl({
             position: 'top-right',
-            supportedFormats: ['csv', 'geojson', 'json', 'gpx', 'kml']
+            supportedFormats: ['csv', 'geojson', 'json', 'gpx', 'kml', 'shp', 'zip']
+        });
+        map.addControl(vectorLayerControl, 'top-right');
+        
+        // Aggiungi il controllo per il Layer Panel
+        map.addControl(new LayerPanelControl({
+            vectorLayerControlRef: vectorLayerControl
         }), 'top-right');
         
         map.addControl(new SettingsControl(), 'top-right');
@@ -61,17 +67,5 @@ document.addEventListener('DOMContentLoaded', () => {
         new BasemapSelector(map, {
             defaultBasemap: 'satellite'
         });
-        
-        // Applica le ottimizzazioni mobile se necessario
-        applyMobileOptimizations(map, {
-            // Personalizza le opzioni se necessario
-            // forceOptimizations: true, // Forza le ottimizzazioni anche su desktop (solo per test)
-            enableQuickZoom: true,
-            enableTwoFingerRotation: true,
-            enableTwoFingerTiltUp: true,
-            enableQuickReset: true
-        });
-        
-        // Il messaggio di benvenuto è stato rimosso come richiesto
     });
 });

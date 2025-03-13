@@ -1,5 +1,4 @@
 import maplibregl from 'maplibre-gl';
-import { createLayerPanel, updateLayerPanel, toggleLayerPanel, makeDraggable } from './LayerPanel';
 import { handleLocalFile, loadFromURL, processShapefile } from './FileHandlers';
 import { showDialog, showMessage, showLoadingMessage, hideLoadingMessage, addStyles } from './UIComponents';
 import { addGeoJSONToMap, removeLayer, toggleLayerVisibility, addPopupToLayer } from './MapUtils';
@@ -16,9 +15,6 @@ class VectorLayerControl {
         this._container = null;
         this._layerCount = 0;
         this._addedLayers = []; // Teniamo traccia dei layer aggiunti
-        this._layerPanel = null; // Pannello per la gestione dei layer
-        this._layerPanelVisible = false; // Stato di visibilità del pannello
-        this._dragOffset = { x: 0, y: 0 }; // Per il dragging del pannello
         this._options = {
             position: options.position || 'top-right',
             supportedFormats: options.supportedFormats || ['csv', 'geojson', 'json', 'gpx', 'kml', 'shp', 'zip']
@@ -49,8 +45,7 @@ class VectorLayerControl {
         // Opzioni del menu
         const options = [
             { label: 'Carica file locale', action: () => this._promptLocalFile() },
-            { label: 'Carica da URL', action: () => this._promptURL() },
-            { label: 'Mostra Layer Panel', action: () => this._toggleLayerPanel() }
+            { label: 'Carica da URL', action: () => this._promptURL() }
         ];
         
         options.forEach(option => {
@@ -87,9 +82,6 @@ class VectorLayerControl {
             dropdownMenu.style.display = 'none';
         });
         
-        // Crea il pannello dei layer
-        this._createLayerPanel();
-        
         // Aggiungi stili CSS
         addStyles();
         
@@ -97,36 +89,8 @@ class VectorLayerControl {
     }
 
     onRemove() {
-        // Rimuovi il pannello dei layer se esiste
-        if (this._layerPanel && this._layerPanel.parentNode) {
-            this._layerPanel.parentNode.removeChild(this._layerPanel);
-        }
-        
         this._container.parentNode.removeChild(this._container);
         this._map = null;
-    }
-    
-    // Metodi wrappers che esportano il contesto
-    _createLayerPanel() {
-        this._layerPanel = createLayerPanel(
-            this._layerPanelVisible, 
-            this._addedLayers, 
-            (layer, visible) => this._toggleLayerVisibility(layer, visible),
-            (index) => this._removeLayer(index),
-            () => this._toggleLayerPanel(),
-            this._dragOffset
-        );
-    }
-    
-    _updateLayerPanel() {
-        if (this._layerPanelVisible) {
-            updateLayerPanel(this);
-        }
-    }
-    
-    _toggleLayerPanel() {
-        this._layerPanelVisible = !this._layerPanelVisible;
-        toggleLayerPanel(this._layerPanelVisible, this._layerPanel, () => this._createLayerPanel());
     }
     
     _toggleLayerVisibility(layer, visible) {
@@ -228,7 +192,10 @@ class VectorLayerControl {
     }
     
     _removeLayer(index) {
-        removeLayer(this._map, this._addedLayers, index, () => this._updateLayerPanel(), showMessage);
+        removeLayer(this._map, this._addedLayers, index, () => {
+            // Notifica il LayerPanelControl che è stato rimosso un layer
+            this._notifyLayerPanelUpdate();
+        }, showMessage);
     }
     
     _addGeoJSONToMap(geojson, layerName) {
@@ -239,11 +206,8 @@ class VectorLayerControl {
             this._addedLayers, 
             (layerId, sourceId) => this._addPopupToLayer(layerId, sourceId),
             () => {
-                if (!this._layerPanelVisible) {
-                    this._toggleLayerPanel();
-                } else {
-                    this._updateLayerPanel();
-                }
+                // Notifica il LayerPanelControl che è stato aggiunto un layer
+                this._notifyLayerPanelUpdate();
             },
             showMessage
         );
@@ -251,6 +215,16 @@ class VectorLayerControl {
     
     _addPopupToLayer(layerId, sourceId) {
         addPopupToLayer(this._map, layerId, sourceId);
+    }
+    
+    _notifyLayerPanelUpdate() {
+        // Trova tutte le istanze di LayerPanelControl presenti nella mappa
+        const controls = this._map._controls || [];
+        for (const control of controls) {
+            if (control._updateLayerPanel && typeof control._updateLayerPanel === 'function') {
+                control._updateLayerPanel();
+            }
+        }
     }
 }
 

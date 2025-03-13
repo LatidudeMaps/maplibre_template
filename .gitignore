@@ -1,5 +1,14 @@
 node_modules
 dist
 .DS_Store
-CHANGELOG.md 
-DEV_DIARY.md
+
+# Ignora la cartella diario
+/diario/
+/diario
+
+# Ignora tutti i file .bak
+*.bak
+
+# Ignora le cartelle di backup
+*-bak/
+*-bak

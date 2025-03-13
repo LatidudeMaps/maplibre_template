@@ -1,6 +1,7 @@
 import toGeoJSON from '@mapbox/togeojson';
 import shpjs from 'shpjs';
 import * as Papa from 'papaparse';
+import JSZip from 'jszip';
 
 /**
  * Gestisce il file locale selezionato
@@ -211,6 +212,21 @@ export function loadFromURL(
 }
 
 /**
+ * Decodifica un file DBF
+ * @param {ArrayBuffer} buffer - Il contenuto del file DBF
+ * @returns {Promise<Array>} - Array di oggetti con gli attributi
+ */
+async function parseDbf(buffer) {
+    try {
+        const attributes = await shpjs.parseDbf(buffer);
+        return attributes;
+    } catch (error) {
+        console.error("Errore nel parsing del file DBF:", error);
+        throw error;
+    }
+}
+
+/**
  * Processa uno shapefile e lo converte in GeoJSON
  * @param {ArrayBuffer} buffer - Il contenuto del file shapefile
  * @param {string} layerName - Il nome da assegnare al layer
@@ -237,27 +253,37 @@ export async function processShapefile(
         let geojson;
         
         if (isZip) {
-            // Per i file ZIP dobbiamo usare JSZip direttamente per evitare l'errore nodebuffer
+            console.log("File ZIP rilevato, estrazione dei file...");
             try {
-                // Importiamo dinamicamente JSZip
-                const JSZip = await import('jszip').then(module => module.default);
+                // Carica l'archivio ZIP
                 const zip = new JSZip();
-                
-                // Carichiamo l'archivio ZIP
                 const zipContent = await zip.loadAsync(buffer);
                 
-                // Cerchiamo i file .shp e .dbf nell'archivio
+                // Estrai i nomi dei file a scopo di debug
+                const fileNames = Object.keys(zipContent.files).join(", ");
+                console.log("File trovati nello ZIP:", fileNames);
+                
+                // Raccogli tutti i file necessari per uno shapefile completo
                 let shpFile = null;
                 let dbfFile = null;
                 
-                // Scan per i file necessari
-                const files = Object.keys(zipContent.files);
-                for (const filename of files) {
+                // Cerca i file .shp e .dbf
+                for (const filename of Object.keys(zipContent.files)) {
+                    if (zipContent.files[filename].dir) continue;
+                    
                     const lowerName = filename.toLowerCase();
                     if (lowerName.endsWith('.shp')) {
-                        shpFile = { name: filename, content: await zipContent.files[filename].async('arraybuffer') };
+                        console.log("File SHP trovato:", filename);
+                        shpFile = {
+                            name: filename,
+                            content: await zipContent.files[filename].async('arraybuffer')
+                        };
                     } else if (lowerName.endsWith('.dbf')) {
-                        dbfFile = { name: filename, content: await zipContent.files[filename].async('arraybuffer') };
+                        console.log("File DBF trovato:", filename);
+                        dbfFile = {
+                            name: filename,
+                            content: await zipContent.files[filename].async('arraybuffer')
+                        };
                     }
                 }
                 
@@ -265,59 +291,113 @@ export async function processShapefile(
                     throw new Error("Nessun file .shp trovato nell'archivio ZIP");
                 }
                 
-                // Utilizziamo la funzione parseShp per il file .shp
-                let features = await shpjs.parseShp(shpFile.content);
+                // Elabora il file .shp
+                console.log("Elaborazione geometria dal file .shp...");
+                let geomFeatures;
+                try {
+                    geomFeatures = await shpjs.parseShp(shpFile.content);
+                    console.log("Geometrie estratte con successo:", geomFeatures.length);
+                } catch (shpError) {
+                    console.error("Errore nell'elaborazione del file .shp:", shpError);
+                    throw new Error("Impossibile estrarre le geometrie dal file .shp: " + shpError.message);
+                }
                 
-                // Se abbiamo anche un file .dbf, aggiungiamo gli attributi
+                // Se abbiamo un file DBF, estrai gli attributi
+                let attributes = [];
                 if (dbfFile) {
-                    const attributes = await shpjs.parseDbf(dbfFile.content);
-                    
-                    // Combiniamo geometria e attributi
-                    if (Array.isArray(features) && Array.isArray(attributes) && features.length === attributes.length) {
-                        features = features.map((feature, i) => {
-                            return {
-                                ...feature,
-                                properties: attributes[i]
-                            };
-                        });
+                    console.log("Elaborazione attributi dal file .dbf...");
+                    try {
+                        attributes = await parseDbf(dbfFile.content);
+                        console.log("Attributi estratti con successo:", attributes.length);
+                    } catch (dbfError) {
+                        console.error("Errore nell'elaborazione del file .dbf:", dbfError);
+                        // Non blocchiamo tutto, ma notiamo l'errore
+                        console.warn("Gli attributi non saranno disponibili nelle feature");
                     }
                 }
                 
-                // Validiamo le feature e filtriamo quelle non valide
-                features = validateAndFixFeatures(features);
+                // Combina geometrie e attributi
+                console.log("Combinazione geometrie e attributi...");
+                let features = [];
                 
-                // Creiamo il GeoJSON
+                if (Array.isArray(geomFeatures) && geomFeatures.length > 0) {
+                    // Se abbiamo attributi in numero uguale alle geometrie, combiniamoli
+                    if (Array.isArray(attributes) && attributes.length === geomFeatures.length) {
+                        features = geomFeatures.map((geom, index) => {
+                            return {
+                                type: 'Feature',
+                                geometry: geom,
+                                properties: attributes[index] || {}
+                            };
+                        });
+                        console.log("Geometrie e attributi combinati con successo");
+                    } else {
+                        // Altrimenti, usiamo solo le geometrie
+                        features = geomFeatures.map(geom => {
+                            return {
+                                type: 'Feature',
+                                geometry: geom,
+                                properties: {}
+                            };
+                        });
+                        console.log("Solo geometrie utilizzate (attributi mancanti o non corrispondenti)");
+                    }
+                } else {
+                    throw new Error("Nessuna geometria valida trovata nel file .shp");
+                }
+                
+                // Crea il GeoJSON
                 geojson = {
                     type: 'FeatureCollection',
                     features: features
                 };
+                
+                console.log("GeoJSON creato con successo:", features.length, "feature");
                 
             } catch (zipError) {
                 console.error("Errore nell'elaborazione del file ZIP:", zipError);
-                throw new Error("Impossibile elaborare il file ZIP: " + zipError.message);
+                throw new Error("Impossibile elaborare l'archivio ZIP: " + zipError.message);
             }
         } else {
-            // Se non è un archivio zip, tentiamo di elaborarlo come shapefile singolo
+            // Elabora un file .shp singolo
+            console.log("Elaborazione file .shp singolo...");
             try {
                 let features = await shpjs.parseShp(buffer);
                 
-                // Validiamo le feature e filtriamo quelle non valide
-                features = validateAndFixFeatures(features);
+                if (!features || features.length === 0) {
+                    throw new Error("Nessun dato trovato nel file .shp");
+                }
                 
-                // Creiamo il GeoJSON
+                // Converti le geometrie in feature GeoJSON
+                features = features.map(geom => ({
+                    type: 'Feature',
+                    geometry: geom,
+                    properties: {}
+                }));
+                
+                // Crea il GeoJSON
                 geojson = {
                     type: 'FeatureCollection',
                     features: features
                 };
+                
+                console.log("Shapefile (.shp) elaborato con successo:", features.length, "feature");
+                
             } catch (shpError) {
-                console.error("Errore nell'elaborazione del file SHP:", shpError);
-                throw new Error("Impossibile elaborare il file come shapefile: " + shpError.message);
+                console.error("Errore nell'elaborazione del file .shp:", shpError);
+                throw new Error("Impossibile elaborare il file shapefile: " + shpError.message);
             }
         }
         
-        // Verifica se abbiamo ottenuto un GeoJSON valido
-        if (!geojson || !geojson.features || geojson.features.length === 0) {
-            throw new Error("Nessun dato valido trovato nel file shapefile.");
+        // Valida e correggi le feature
+        if (geojson && geojson.features) {
+            geojson.features = validateAndFixFeatures(geojson.features);
+            
+            if (!geojson.features || geojson.features.length === 0) {
+                throw new Error("Nessuna feature valida trovata dopo la validazione");
+            }
+        } else {
+            throw new Error("GeoJSON non valido generato dall'elaborazione");
         }
         
         // Rimuovi l'indicatore di caricamento
@@ -327,7 +407,7 @@ export async function processShapefile(
         addGeoJSONCallback(geojson, layerName);
     } catch (error) {
         hideLoadingMessageCallback();
-        console.error("Errore nell'elaborazione dello shapefile:", error);
+        console.error("Errore finale nell'elaborazione dello shapefile:", error);
         showMessageCallback(`Errore nell'elaborazione dello shapefile: ${error.message}`, 'error');
     }
 }
@@ -339,64 +419,63 @@ export async function processShapefile(
  */
 export function validateAndFixFeatures(features) {
     if (!Array.isArray(features)) {
+        console.warn("validateAndFixFeatures: input non è un array", features);
         return [];
     }
     
     return features.filter(feature => {
+        if (!feature) {
+            console.warn("validateAndFixFeatures: feature è null o undefined");
+            return false;
+        }
+        
+        // Se la feature non ha type='Feature', verifichiamo se è direttamente una geometria
+        if (feature.type !== 'Feature') {
+            console.warn("validateAndFixFeatures: feature non ha type='Feature'", feature);
+            
+            // Se sembra una geometria valida, la convertiamo in Feature
+            if (feature.type && feature.coordinates) {
+                const validGeometryTypes = ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon'];
+                if (validGeometryTypes.includes(feature.type)) {
+                    console.log("validateAndFixFeatures: convertita geometria in Feature", feature.type);
+                    return {
+                        type: 'Feature',
+                        geometry: {
+                            type: feature.type,
+                            coordinates: feature.coordinates
+                        },
+                        properties: feature.properties || {}
+                    };
+                }
+            }
+            return false;
+        }
+        
         // Verifica che la feature abbia una geometria
-        if (!feature || !feature.geometry) {
+        if (!feature.geometry) {
+            console.warn("validateAndFixFeatures: feature senza geometria", feature);
             return false;
         }
         
         // Verifica che la geometria abbia un tipo valido
         const validTypes = ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon'];
         if (!feature.geometry.type || !validTypes.includes(feature.geometry.type)) {
+            console.warn("validateAndFixFeatures: tipo di geometria non valido", feature.geometry.type);
             return false;
         }
         
         // Verifica che ci siano coordinate valide
         if (!feature.geometry.coordinates || !Array.isArray(feature.geometry.coordinates)) {
+            console.warn("validateAndFixFeatures: coordinate non valide", feature.geometry.coordinates);
             return false;
         }
         
-        // Verifica specifiche per ogni tipo di geometria
-        switch (feature.geometry.type) {
-            case 'Point':
-                return Array.isArray(feature.geometry.coordinates) && 
-                       feature.geometry.coordinates.length >= 2 &&
-                       feature.geometry.coordinates.every(coord => typeof coord === 'number');
-                
-            case 'MultiPoint':
-            case 'LineString':
-                return Array.isArray(feature.geometry.coordinates) && 
-                       feature.geometry.coordinates.length > 0 &&
-                       feature.geometry.coordinates.every(coord => 
-                           Array.isArray(coord) && coord.length >= 2 && coord.every(c => typeof c === 'number')
-                       );
-                
-            case 'MultiLineString':
-            case 'Polygon':
-                return Array.isArray(feature.geometry.coordinates) && 
-                       feature.geometry.coordinates.length > 0 &&
-                       feature.geometry.coordinates.every(ring => 
-                           Array.isArray(ring) && ring.length > 0 && 
-                           ring.every(coord => Array.isArray(coord) && coord.length >= 2 && coord.every(c => typeof c === 'number'))
-                       );
-                
-            case 'MultiPolygon':
-                return Array.isArray(feature.geometry.coordinates) && 
-                       feature.geometry.coordinates.length > 0 &&
-                       feature.geometry.coordinates.every(polygon => 
-                           Array.isArray(polygon) && polygon.length > 0 &&
-                           polygon.every(ring => 
-                               Array.isArray(ring) && ring.length > 0 && 
-                               ring.every(coord => Array.isArray(coord) && coord.length >= 2 && coord.every(c => typeof c === 'number'))
-                           )
-                       );
-                
-            default:
-                return false;
+        // Assicura che le properties esistano
+        if (!feature.properties) {
+            feature.properties = {};
         }
+        
+        return true;
     });
 }
 
@@ -406,24 +485,15 @@ export function validateAndFixFeatures(features) {
  * @returns {boolean} - true se il buffer contiene un file ZIP
  */
 export function isZipBuffer(buffer) {
+    if (!buffer || buffer.byteLength < 4) {
+        return false;
+    }
     // Verifica la firma (magic number) del file ZIP: 0x50 0x4B 0x03 0x04
     const bytes = new Uint8Array(buffer.slice(0, 4));
     return bytes[0] === 0x50 && 
            bytes[1] === 0x4B && 
            bytes[2] === 0x03 && 
            bytes[3] === 0x04;
-}
-
-/**
- * Verifica se un ArrayBuffer contiene un file Shapefile
- * @param {ArrayBuffer} buffer - Il buffer da verificare
- * @returns {boolean} - true se il buffer contiene un file Shapefile
- */
-export function isShpBuffer(buffer) {
-    // Controlla la firma del file Shapefile (Magic number: 0x0000270a in big endian)
-    const view = new DataView(buffer);
-    const fileCode = view.getInt32(0, false); // false = big endian
-    return fileCode === 9994; // 0x0000270a in decimale
 }
 
 /**
