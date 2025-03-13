@@ -18,11 +18,15 @@
     "@mapbox/togeojson": "^0.16.2",
     "@turf/turf": "^6.5.0",
     "@watergis/maplibre-gl-export": "^4.0.0",
+    "buffer": "^6.0.3",
+    "jszip": "^3.10.1",
     "maplibre-gl": "^5.2.0",
     "maplibre-theme": "^0.2.1",
     "papaparse": "^5.4.1",
+    "path-browserify": "^1.0.1",
     "shapefile": "^0.6.6",
-    "shpjs": "^4.0.4"
+    "shpjs": "^4.0.4",
+    "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
     "css-loader": "^6.7.3",

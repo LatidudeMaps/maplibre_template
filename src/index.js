@@ -1,4 +1,4 @@
-import maplibregl from 'maplibre-gl';
+import maplibregl from 'maplibre-gl'
 // Import CSS
 import 'maplibre-theme/icons.default.css';
 import 'maplibre-theme/classic.css';
@@ -13,6 +13,8 @@ import ThemeToggleControl from './ThemeToggle';
 import BasemapSelector from './BasemapSelector';
 // Import del controllo per i layer vettoriali
 import VectorLayerControl from './VectorLayerControl';
+// Import del modulo di ottimizzazione mobile
+import { applyMobileOptimizations, isMobileDevice } from './mobile-optimization';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Controlla se è stato salvato un tema e applicalo
@@ -54,12 +56,22 @@ document.addEventListener('DOMContentLoaded', () => {
         map.addControl(new SettingsControl(), 'top-right');
         map.addControl(new maplibregl.ScaleControl(), 'bottom-left');
         
-
-    });
-    
-    // Crea il selettore di basemap (non è necessario aggiungerlo come controllo)
-    // poiché si posiziona automaticamente sulla mappa
-    new BasemapSelector(map, {
-        defaultBasemap: 'satellite'
+        // Crea il selettore di basemap (non è necessario aggiungerlo come controllo)
+        // poiché si posiziona automaticamente sulla mappa
+        new BasemapSelector(map, {
+            defaultBasemap: 'satellite'
+        });
+        
+        // Applica le ottimizzazioni mobile se necessario
+        applyMobileOptimizations(map, {
+            // Personalizza le opzioni se necessario
+            // forceOptimizations: true, // Forza le ottimizzazioni anche su desktop (solo per test)
+            enableQuickZoom: true,
+            enableTwoFingerRotation: true,
+            enableTwoFingerTiltUp: true,
+            enableQuickReset: true
+        });
+        
+        // Il messaggio di benvenuto è stato rimosso come richiesto
     });
 });

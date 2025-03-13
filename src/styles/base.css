@@ -1,0 +1,40 @@
+/* ==========================================================================
+   STILI BASE
+   ========================================================================== */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--ml-font);
+  transition: var(--transition-default);
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Migliora l'aspetto visivo dei controlli */
+.settings-controls-container .maplibregl-ctrl {
+  margin: 0 !important;
+  margin-bottom: 5px !important;
+}
+
+/* Correzione per i controlli di navigazione */
+.maplibregl-ctrl-group {
+  margin-bottom: 0;
+}
+
+/* Aggiustamento per il bottone di toggle */
+.maplibregl-ctrl-group button {
+  width: 30px;
+  height: 30px;
+}
+
+/* Allineamento dei bottoni del wrapper */
+.settings-controls-container > .maplibregl-ctrl-group {
+  margin-bottom: 5px !important;
+}

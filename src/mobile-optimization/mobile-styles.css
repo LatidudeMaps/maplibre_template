@@ -1,0 +1,563 @@
+/* ==========================================================================
+   STILI SPECIFICI PER DISPOSITIVI MOBILI
+   Nuova implementazione secondo mockup - Versione corretta
+   ========================================================================== */
+
+/* Variabili per dispositivi mobili */
+:root {
+   --mobile-touch-area: 40px; /* Dimensione area di tocco */
+   --mobile-control-size: 40px; /* Dimensione controlli */
+   --mobile-primary-color: #0078FF;
+   --mobile-text-color: rgba(0, 0, 0, 0.8);
+   --mobile-border-color: rgba(0, 0, 0, 0.1);
+   --mobile-background-color: rgba(245, 245, 245, 0.9);
+   --mobile-container-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+   --mobile-border-radius: 20px;
+   --mobile-spacing: 10px;
+   --mobile-top-margin: 15px; /* Aumentato per abbassare i controlli superiori */
+   --mobile-bottom-margin: 15px;
+}
+
+/* Applicazione di stili diversi per il tema scuro */
+.dark {
+   --mobile-text-color: rgba(255, 255, 255, 0.9);
+   --mobile-border-color: rgba(255, 255, 255, 0.15);
+   --mobile-background-color: rgba(30, 41, 59, 0.85);
+   --mobile-container-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Quando viene applicato il layout mobile */
+body.mobile-device {
+   /* Nascondiamo i controlli originali per evitare duplicazioni */
+   overflow-x: hidden;
+}
+
+body.mobile-device .maplibregl-control-container {
+   /* Nascondiamo i controlli originali ma li manteniamo attivi per la funzionalità */
+   opacity: 0.01;
+   pointer-events: none !important;
+}
+
+body.mobile-device .maplibregl-ctrl-group, 
+body.mobile-device .maplibregl-ctrl {
+   pointer-events: auto !important; /* Mantieni cliccabili solo i controlli */
+}
+
+body.mobile-device .maplibregl-ctrl-minimap {
+   display: none !important; /* Nascondi la minimappa su mobile */
+}
+
+/* Nascondi il selettore di basemap della versione desktop */
+body.mobile-device .basemap-buttons-control {
+   display: none !important;
+}
+
+/* Layout principale dei controlli mobile */
+.mobile-controls-top {
+   position: fixed;
+   top: var(--mobile-top-margin);
+   left: 0;
+   right: 0;
+   z-index: 1000;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 var(--mobile-spacing);
+   height: var(--mobile-control-size);
+   pointer-events: none;
+}
+
+.mobile-controls-bottom {
+   position: fixed;
+   bottom: var(--mobile-bottom-margin);
+   left: 0;
+   right: 0;
+   z-index: 1000;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 var(--mobile-spacing);
+   height: var(--mobile-control-size);
+   pointer-events: none;
+}
+
+/* Sezioni per i controlli */
+.mobile-controls-left,
+.mobile-controls-center,
+.mobile-controls-right {
+   pointer-events: auto;
+   display: flex;
+   align-items: center;
+}
+
+.mobile-controls-center {
+   position: absolute;
+   left: 50%;
+   transform: translateX(-50%);
+}
+
+/* Logo cliccabile */
+.mobile-logo {
+   width: var(--mobile-control-size);
+   height: var(--mobile-control-size);
+   border-radius: 50%;
+   background-color: var(--mobile-background-color);
+   box-shadow: var(--mobile-container-shadow);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   overflow: hidden;
+   transition: transform 0.2s ease;
+}
+
+.mobile-logo:active {
+   transform: scale(0.95);
+}
+
+.mobile-logo img,
+.mobile-logo svg {
+   max-width: 28px;
+   max-height: 28px;
+}
+
+/* Controlli di navigazione centrali */
+.mobile-nav-controls {
+   height: var(--mobile-control-size);
+   background-color: var(--mobile-background-color);
+   border-radius: var(--mobile-border-radius);
+   box-shadow: var(--mobile-container-shadow);
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   overflow: hidden;
+   padding: 0;
+   margin: 0;
+   font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.mobile-nav-controls button {
+   width: var(--mobile-control-size);
+   height: var(--mobile-control-size);
+   border: none;
+   background-color: transparent;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   padding: 0;
+   margin: 0;
+   color: var(--mobile-text-color);
+   font-size: 18px;
+   font-weight: bold;
+   font-family: inherit;
+   border-radius: 0 !important;
+}
+
+.mobile-nav-controls button:not(:last-child) {
+   border-right: 1px solid var(--mobile-border-color);
+}
+
+.mobile-nav-controls button:active {
+   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .mobile-nav-controls button:active {
+   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Fix per i controlli di navigazione */
+.mobile-nav-controls .maplibregl-ctrl-zoom-in,
+.mobile-nav-controls .maplibregl-ctrl-zoom-out {
+   font-size: 22px;
+   font-weight: bold;
+}
+
+.mobile-nav-controls .maplibregl-ctrl-zoom-in:after {
+   content: "+";
+}
+
+.mobile-nav-controls .maplibregl-ctrl-zoom-out:after {
+   content: "−";
+}
+
+.mobile-nav-controls .maplibregl-ctrl-compass:after {
+   content: "⤺";
+   font-size: 20px;
+}
+
+/* Wrapper button (in alto a destra) */
+.mobile-wrapper-button {
+   width: var(--mobile-control-size);
+   height: var(--mobile-control-size);
+   border-radius: 50%;
+   background-color: var(--mobile-background-color);
+   box-shadow: var(--mobile-container-shadow);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: transform 0.2s ease;
+   color: var(--mobile-text-color);
+}
+
+.mobile-wrapper-button:active {
+   transform: scale(0.95);
+}
+
+.mobile-wrapper-button svg {
+   width: 24px;
+   height: 24px;
+}
+
+/* Fix per il pulsante wrapper */
+.mobile-wrapper-button:after {
+   content: "⚙️";
+   font-size: 24px;
+   display: block;
+}
+
+/* Container tendina */
+.mobile-settings-container {
+   position: fixed;
+   top: calc(var(--mobile-top-margin) + var(--mobile-control-size) + 5px);
+   right: var(--mobile-spacing);
+   background-color: var(--mobile-background-color);
+   border-radius: var(--mobile-border-radius);
+   box-shadow: var(--mobile-container-shadow);
+   display: none; /* Nascosto di default */
+   flex-direction: column;
+   padding: 8px;
+   gap: 8px;
+   z-index: 1001;
+}
+
+.mobile-settings-container.visible {
+   display: flex;
+}
+
+.mobile-settings-container button {
+   width: var(--mobile-control-size);
+   height: var(--mobile-control-size);
+   border: none;
+   border-radius: 6px;
+   background-color: transparent;
+   color: var(--mobile-text-color);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   padding: 0;
+   margin: 0;
+   position: relative;
+}
+
+.mobile-settings-container button:active {
+   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .mobile-settings-container button:active {
+   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Fix per i pulsanti nella tendina */
+.mobile-settings-container [data-control-id="theme"]:after {
+   content: "🌙";
+   font-size: 20px;
+   display: block;
+}
+
+.mobile-settings-container [data-control-id="globe"]:after {
+   content: "🌎";
+   font-size: 20px;
+   display: block;
+}
+
+.mobile-settings-container [data-control-id="import"]:after {
+   content: "📂";
+   font-size: 20px;
+   display: block;
+}
+
+.mobile-settings-container [data-control-id="geolocate"]:after {
+   content: "📍";
+   font-size: 20px;
+   display: block;
+}
+
+.mobile-settings-container [data-control-id="info"]:after {
+   content: "ℹ️";
+   font-size: 20px;
+   display: block;
+}
+
+.mobile-settings-container [data-control-id="terrain"]:after {
+   content: "🏔️";
+   font-size: 20px;
+   display: block;
+}
+
+/* Scale control */
+.mobile-scale {
+   background-color: var(--mobile-background-color);
+   border-radius: 4px;
+   box-shadow: var(--mobile-container-shadow);
+   padding: 4px 8px;
+   font-size: 12px;
+   line-height: 1;
+   color: var(--mobile-text-color);
+   font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+   font-weight: 500;
+   white-space: nowrap;
+   z-index: 1002; /* Assicura che sia sopra il selettore di basemap */
+}
+
+/* Basemap selector - versione mobile compatta */
+.mobile-basemap-buttons {
+   background-color: var(--mobile-background-color);
+   border-radius: var(--mobile-border-radius);
+   box-shadow: var(--mobile-container-shadow);
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   overflow: hidden;
+   font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.mobile-basemap-buttons button {
+   border: none;
+   background-color: transparent;
+   color: var(--mobile-text-color);
+   padding: 0 10px;
+   font-size: 13px;
+   height: 32px; /* Ridotta rispetto ai controlli normali */
+   cursor: pointer;
+   white-space: nowrap;
+   font-family: inherit;
+   font-weight: 700; /* Aggiunto font in grassetto come richiesto */
+}
+
+.mobile-basemap-buttons button.active {
+   background-color: var(--mobile-primary-color);
+   color: white;
+}
+
+/* Attribution button */
+.mobile-attribution-button {
+   width: var(--mobile-control-size);
+   height: var(--mobile-control-size);
+   border-radius: 50%;
+   background-color: var(--mobile-background-color);
+   box-shadow: var(--mobile-container-shadow);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   font-weight: bold;
+   font-size: 20px;
+   color: var(--mobile-text-color);
+   transition: transform 0.2s ease;
+   font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.mobile-attribution-button:active {
+   transform: scale(0.95);
+}
+
+/* Popup di attribuzione */
+.mobile-attribution-popup {
+   position: fixed;
+   bottom: calc(var(--mobile-control-size) + var(--mobile-bottom-margin) + 10px);
+   right: var(--mobile-spacing);
+   background-color: var(--mobile-background-color);
+   border-radius: 8px;
+   box-shadow: var(--mobile-container-shadow);
+   padding: 10px;
+   font-size: 12px;
+   max-width: 250px;
+   z-index: 1001;
+   display: none;
+   color: var(--mobile-text-color);
+   font-family: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.mobile-attribution-popup.visible {
+   display: block;
+}
+
+.mobile-attribution-popup p {
+   margin: 5px 0;
+}
+
+.mobile-attribution-popup a {
+   color: var(--mobile-primary-color);
+   text-decoration: none;
+}
+
+/* Correzione per lo scale control per evitare sovrapposizioni */
+.mobile-controls-bottom .mobile-controls-left {
+   z-index: 1002; /* Assicura che lo scale control sia sopra al basemap selector */
+   margin-right: 8px;
+}
+
+.mobile-controls-bottom .mobile-controls-center {
+   z-index: 1001;
+}
+
+/* Migliora la visualizzazione dei popup e pannelli su mobile */
+.mobile-device .maplibregl-popup {
+   max-width: 85vw !important;
+}
+
+.mobile-device .maplibregl-popup-content {
+   padding: 10px !important;
+   font-size: 13px !important;
+   line-height: 1.4 !important;
+   max-height: 70vh !important;
+   overflow-y: auto !important;
+   background-color: var(--mobile-background-color) !important;
+   color: var(--mobile-text-color) !important;
+}
+
+/* Aumenta la dimensione dell'area di tocco per chiudere un popup */
+.mobile-device .maplibregl-popup-close-button {
+   padding: 5px !important;
+   font-size: 18px !important;
+   top: 2px !important;
+   right: 2px !important;
+   color: var(--mobile-text-color) !important;
+}
+
+/* Miglioramenti per i controlli dei layer vettoriali */
+.mobile-device .vector-layer-panel {
+   box-shadow: var(--mobile-container-shadow) !important;
+   border-radius: 6px !important;
+   background-color: var(--mobile-background-color) !important;
+   color: var(--mobile-text-color) !important;
+   z-index: 999 !important;
+}
+
+.mobile-device .vector-layer-panel-header {
+   padding: 8px 10px !important;
+   display: flex !important;
+   align-items: center !important;
+   justify-content: space-between !important;
+   border-bottom: 1px solid var(--mobile-border-color) !important;
+}
+
+.mobile-device .vector-layer-panel-title {
+   font-size: 14px !important;
+   font-weight: 600 !important;
+   margin: 0 !important;
+}
+
+.mobile-device .vector-layer-panel-item {
+   padding: 8px 10px !important;
+   border-top: 1px solid var(--mobile-border-color) !important;
+   display: flex !important;
+   align-items: center !important;
+   justify-content: space-between !important;
+}
+
+.mobile-device .vector-layer-panel-remove {
+   width: 26px !important;
+   height: 26px !important;
+   line-height: 26px !important;
+   text-align: center !important;
+   font-size: 16px !important;
+   display: flex !important;
+   align-items: center !important;
+   justify-content: center !important;
+   border-radius: 3px !important;
+   margin-left: 5px !important;
+}
+
+.mobile-device .vector-layer-panel-item label {
+   font-size: 13px !important;
+   overflow: hidden !important;
+   text-overflow: ellipsis !important;
+   white-space: nowrap !important;
+   max-width: calc(100% - 35px) !important;
+   line-height: 1.2 !important;
+}
+
+/* Stili per i dialoghi */
+.mobile-device .vector-layer-dialog {
+   box-shadow: var(--mobile-container-shadow) !important;
+   border-radius: 8px !important;
+   background-color: var(--mobile-background-color) !important;
+   color: var(--mobile-text-color) !important;
+   z-index: 1002 !important; /* Sopra tutti gli altri elementi */
+}
+
+.mobile-device .vector-layer-dialog h3,
+.mobile-device .vector-layer-dialog h4 {
+   font-size: 16px !important;
+   font-weight: 600 !important;
+   margin: 0 0 12px 0 !important;
+   padding: 0 !important;
+}
+
+.mobile-device .vector-layer-dialog input, 
+.mobile-device .vector-layer-dialog select,
+.mobile-device .vector-layer-dialog button {
+   height: 36px !important;
+   font-size: 15px !important; /* Previeni lo zoom automatico su iOS */
+   border-radius: 4px !important;
+   border: 1px solid var(--mobile-border-color) !important;
+}
+
+.mobile-device .vector-layer-dialog input,
+.mobile-device .vector-layer-dialog select {
+   width: 100% !important;
+   padding: 5px 8px !important;
+   margin-bottom: 10px !important;
+   box-sizing: border-box !important;
+}
+
+.mobile-device .vector-layer-dialog-buttons,
+.mobile-device .buttons-container {
+   display: flex !important;
+   justify-content: center !important;
+   margin-top: 15px !important;
+   gap: 10px !important;
+}
+
+.mobile-device .vector-layer-dialog button {
+   padding: 0 15px !important;
+   background-color: var(--mobile-primary-color) !important;
+   color: white !important;
+   border: none !important;
+}
+
+.mobile-device .vector-layer-dialog button.cancel-button {
+   background-color: transparent !important;
+   color: var(--mobile-text-color) !important;
+   border: 1px solid var(--mobile-border-color) !important;
+}
+
+/* Personalizzazioni per diverse dimensioni di schermo */
+@media (max-width: 360px) {
+   :root {
+      --mobile-control-size: 36px;
+      --mobile-spacing: 8px;
+   }
+   
+   .mobile-basemap-buttons button {
+      padding: 0 6px;
+      font-size: 12px;
+   }
+   
+   .mobile-scale {
+      padding: 3px 8px;
+      font-size: 11px;
+   }
+}
+
+/* Aggiustamenti per orientamento landscape su schermi piccoli */
+@media (max-height: 450px) and (orientation: landscape) {
+   :root {
+      --mobile-top-margin: 5px;
+      --mobile-bottom-margin: 5px;
+   }
+}

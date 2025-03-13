@@ -1,0 +1,552 @@
+/**
+ * Modulo per ottimizzare i controlli della mappa su dispositivi mobili
+ */
+
+/**
+ * Configura i controlli per una migliore usabilità su mobile
+ * @param {Object} map - Istanza della mappa MapLibre
+ * @param {Object} options - Opzioni di configurazione
+ */
+export function setupMobileControls(map, options = {}) {
+    const defaultOptions = {
+        controlsSidePadding: 5,       // Padding dei controlli dal bordo in pixel
+        controlsTopPadding: 5,        // Padding dei controlli dall'alto in pixel
+        controlsBottomPadding: 40,    // Padding dei controlli dal basso in pixel
+        buttonSize: 34,               // Dimensione dei pulsanti in pixel
+        buttonSpacing: 5,             // Spazio tra i pulsanti in pixel
+        showMinimap: false            // Non mostrare la minimappa su mobile
+    };
+
+    // Combina le opzioni predefinite con quelle passate
+    const opts = { ...defaultOptions, ...options };
+
+    // Applica gli stili ai contenitori dei controlli esistenti
+    applyControlStyles(map, opts);
+
+    // Ottimizza la disposizione dei controlli (layout orizzontale in alto)
+    reorganizeControls(map, opts);
+    
+    // Ottimizza pannelli e dialoghi
+    optimizePanelsAndDialogs(opts);
+    
+    // Aggiungi evento di resize per aggiornare l'interfaccia quando cambia l'orientamento
+    window.addEventListener('resize', () => {
+        setTimeout(() => {
+            applyControlStyles(map, opts);
+            reorganizeControls(map, opts);
+        }, 300);
+    });
+}
+
+/**
+ * Applica stili ottimizzati ai contenitori dei controlli
+ * @param {Object} map - Istanza della mappa MapLibre
+ * @param {Object} options - Opzioni di configurazione
+ */
+function applyControlStyles(map, options) {
+    // Aggiungi classe CSS per identificare il layout mobile orizzontale
+    document.body.classList.add('mobile-horizontal-controls');
+    
+    // Imposta il container principale
+    const topControlsContainer = document.createElement('div');
+    topControlsContainer.className = 'mobile-top-controls-container';
+    topControlsContainer.style.position = 'fixed';
+    topControlsContainer.style.top = `${options.controlsTopPadding}px`;
+    topControlsContainer.style.left = '0';
+    topControlsContainer.style.right = '0';
+    topControlsContainer.style.display = 'flex';
+    topControlsContainer.style.justifyContent = 'space-between';
+    topControlsContainer.style.alignItems = 'center';
+    topControlsContainer.style.padding = `0 ${options.controlsSidePadding}px`;
+    topControlsContainer.style.pointerEvents = 'none'; // Non interferisce con la mappa
+    topControlsContainer.style.zIndex = '100';
+    
+    // Rimuovi se già esiste
+    const existingContainer = document.querySelector('.mobile-top-controls-container');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+    
+    document.body.appendChild(topControlsContainer);
+    
+    // Muovi i controlli nel container principale
+    const leftControls = document.querySelector('.maplibregl-ctrl-top-left');
+    const rightControls = document.querySelector('.maplibregl-ctrl-top-right');
+    const navControls = document.querySelector('.maplibregl-ctrl-group');
+    
+    if (leftControls) {
+        const leftSection = document.createElement('div');
+        leftSection.className = 'mobile-controls-left';
+        leftSection.style.pointerEvents = 'auto';
+        
+        // Muovi il logo/copyright
+        const logoControl = leftControls.querySelector('.copyright-control');
+        if (logoControl) {
+            leftSection.appendChild(logoControl.cloneNode(true));
+            
+            // Aggiungi l'evento click alla copia
+            const logoButton = leftSection.querySelector('.maplibregl-ctrl-logo-button');
+            if (logoButton) {
+                logoButton.addEventListener('click', () => {
+                    window.open('https://linktr.ee/latitudemaps', '_blank');
+                });
+            }
+        }
+        
+        topControlsContainer.appendChild(leftSection);
+    }
+    
+    // Sezione centrale per i controlli di navigazione
+    const centerSection = document.createElement('div');
+    centerSection.className = 'mobile-controls-center';
+    centerSection.style.pointerEvents = 'auto';
+    
+    // Trova e clona i controlli di navigazione
+    if (navControls) {
+        const navClone = navControls.cloneNode(true);
+        navClone.style.margin = '0';
+        navClone.style.borderRadius = '20px';
+        
+        // Trova i pulsanti di zoom e compass all'interno del clone
+        const buttons = navClone.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.style.width = `${options.buttonSize}px`;
+            button.style.height = `${options.buttonSize}px`;
+            button.style.display = 'inline-flex';
+            button.style.alignItems = 'center';
+            button.style.justifyContent = 'center';
+            
+            // Clona gli eventi originali
+            const original = navControls.querySelector(`button[aria-label=\"${button.getAttribute('aria-label')}\"]`);
+            if (original) {
+                button.addEventListener('click', () => {
+                    original.click();
+                });
+            }
+        });
+        
+        centerSection.appendChild(navClone);
+    }
+    
+    topControlsContainer.appendChild(centerSection);
+    
+    // Sezione destra per il wrapper
+    const rightSection = document.createElement('div');
+    rightSection.className = 'mobile-controls-right';
+    rightSection.style.pointerEvents = 'auto';
+    
+    // Trova il settings control (wrapper)
+    const settingsControl = document.querySelector('.maplibregl-ctrl-settings')?.closest('.maplibregl-ctrl-group');
+    if (settingsControl) {
+        const settingsClone = settingsControl.cloneNode(true);
+        settingsClone.style.margin = '0';
+        
+        // Trova il pulsante all'interno del clone
+        const settingsButton = settingsClone.querySelector('.maplibregl-ctrl-settings');
+        if (settingsButton) {
+            settingsButton.style.width = `${options.buttonSize}px`;
+            settingsButton.style.height = `${options.buttonSize}px`;
+            
+            // Aggiungi evento click che triggera il pulsante originale
+            settingsButton.addEventListener('click', () => {
+                const originalButton = document.querySelector('.maplibregl-ctrl-settings');
+                if (originalButton) {
+                    originalButton.click();
+                }
+            });
+        }
+        
+        rightSection.appendChild(settingsClone);
+    }
+    
+    topControlsContainer.appendChild(rightSection);
+    
+    // Nascondi visivamente i controlli originali ma mantienili funzionali
+    if (leftControls) {
+        leftControls.style.opacity = '0';
+        leftControls.style.position = 'absolute';
+        leftControls.style.pointerEvents = 'auto'; // Mantieni gli eventi attivi
+    }
+    
+    if (rightControls) {
+        rightControls.style.opacity = '0';
+        rightControls.style.position = 'absolute';
+        rightControls.style.pointerEvents = 'auto'; // Mantieni gli eventi attivi
+    }
+    
+    // Ottimizza il selettore di basemap in basso
+    optimizeBasemapSelector(options);
+}
+
+/**
+ * Riorganizza i controlli per una migliore usabilità mobile
+ * @param {Object} map - Istanza della mappa MapLibre
+ * @param {Object} options - Opzioni di configurazione
+ */
+function reorganizeControls(map, options) {
+    // Ottimizza il settings control container
+    const settingsControlsContainer = document.querySelector('.settings-controls-container');
+    if (settingsControlsContainer) {
+        // Posiziona il container in alto a destra, sotto il wrapper
+        settingsControlsContainer.style.position = 'fixed';
+        settingsControlsContainer.style.top = `${options.controlsTopPadding + options.buttonSize + 10}px`;
+        settingsControlsContainer.style.right = `${options.controlsSidePadding}px`;
+        settingsControlsContainer.style.left = 'auto';
+        settingsControlsContainer.style.zIndex = '101';
+        settingsControlsContainer.style.background = 'var(--mobile-background-color)';
+        settingsControlsContainer.style.boxShadow = 'var(--mobile-container-shadow)';
+        settingsControlsContainer.style.borderRadius = '6px';
+        settingsControlsContainer.style.padding = '5px';
+        
+        // Resetta margine
+        settingsControlsContainer.style.margin = '0';
+        
+        // Stile per i pulsanti interni
+        const settingButtons = settingsControlsContainer.querySelectorAll('button');
+        settingButtons.forEach(button => {
+            button.style.width = `${options.buttonSize}px`;
+            button.style.height = `${options.buttonSize}px`;
+            button.style.margin = '3px 0';
+            button.style.display = 'flex';
+            button.style.alignItems = 'center';
+            button.style.justifyContent = 'center';
+            button.style.borderRadius = '4px';
+            
+            // Assicurati che gli eventi click funzionino
+            // In questo caso, non cloniamo gli eventi ma lasciamo funzionare i pulsanti originali
+        });
+    }
+    
+    // Aggiungi un handler di click sul document per chiudere la tendina
+    document.addEventListener('click', (e) => {
+        if (settingsControlsContainer && 
+            !settingsControlsContainer.contains(e.target) && 
+            !e.target.classList.contains('maplibregl-ctrl-settings') &&
+            !e.target.closest('.maplibregl-ctrl-settings')) {
+            
+            // Chiudi la tendina se è aperta
+            if (getComputedStyle(settingsControlsContainer).display !== 'none') {
+                const settingsButton = document.querySelector('.maplibregl-ctrl-settings');
+                if (settingsButton) {
+                    settingsButton.click();
+                }
+            }
+        }
+    });
+    
+    // Rimuovi la minimappa se opzione impostata su false
+    if (!options.showMinimap) {
+        const minimapContainer = document.querySelector('.minimap-container')?.closest('.maplibregl-ctrl');
+        if (minimapContainer) {
+            minimapContainer.style.display = 'none';
+        }
+    }
+    
+    // Fix per il VectorLayerControl nella tendina
+    fixVectorLayerControl();
+}
+
+/**
+ * Fix per il corretto funzionamento del VectorLayerControl nella tendina
+ */
+function fixVectorLayerControl() {
+    // Attendiamo che tutti i controlli siano caricati
+    setTimeout(() => {
+        // Trova il pulsante del vector layer
+        const vectorButton = document.querySelector('.vector-layer-control');
+        if (vectorButton) {
+            // Sovrascriviamo gli stili per assicurarci che sia cliccabile
+            vectorButton.style.pointerEvents = 'auto';
+            
+            // Cloniamo il click listener dal pulsante originale
+            const clonedButton = document.querySelector('.settings-controls-container .vector-layer-control');
+            if (clonedButton) {
+                // Assicuriamoci che il pulsante nella tendina attivi quello originale
+                clonedButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    vectorButton.click();
+                });
+            }
+        }
+    }, 500); // Ritardo per assicurarsi che tutto sia caricato
+}
+
+/**
+ * Ottimizza il selettore di basemap
+ * @param {Object} options - Opzioni di configurazione
+ */
+function optimizeBasemapSelector(options) {
+    const basemapControl = document.querySelector('.basemap-buttons-control');
+    if (!basemapControl) return;
+    
+    // Posiziona il selettore in basso
+    basemapControl.style.position = 'fixed';
+    basemapControl.style.bottom = `${options.controlsBottomPadding}px`;
+    basemapControl.style.left = '50%';
+    basemapControl.style.transform = 'translateX(-50%)';
+    basemapControl.style.top = 'auto';
+    basemapControl.style.right = 'auto';
+    basemapControl.style.zIndex = '100';
+    basemapControl.style.boxShadow = 'var(--mobile-container-shadow)';
+    basemapControl.style.borderRadius = '20px';
+    basemapControl.style.overflow = 'hidden';
+    
+    // Layout orizzontale per il selettore
+    const buttonsContainer = basemapControl.querySelector('.basemap-buttons-container');
+    if (buttonsContainer) {
+        buttonsContainer.style.display = 'flex';
+        buttonsContainer.style.flexDirection = 'row';
+        buttonsContainer.style.gap = '0';
+    }
+    
+    // Stile per i pulsanti
+    const buttons = basemapControl.querySelectorAll('.basemap-button');
+    buttons.forEach(button => {
+        button.style.margin = '0';
+        button.style.padding = '6px 10px';
+        button.style.fontSize = '12px';
+        button.style.borderRadius = '0';
+    });
+}
+
+/**
+ * Ottimizza pannelli e dialoghi per mobile
+ * @param {Object} options - Opzioni di configurazione
+ */
+function optimizePanelsAndDialogs(options) {
+    // Listener per adattare dinamicamente i pannelli che vengono aggiunti successivamente
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length) {
+                mutation.addedNodes.forEach((node) => {
+                    // Verifica se è un pannello o un dialogo
+                    if (node.classList?.contains('vector-layer-panel')) {
+                        optimizeLayerPanel(node, options);
+                    } else if (node.classList?.contains('vector-layer-dialog')) {
+                        optimizeDialog(node, options);
+                    } else if (node.classList?.contains('map-info-panel')) {
+                        optimizeInfoPanel(node, options);
+                    }
+                });
+            }
+        });
+    });
+    
+    // Avvia l'osservazione del body per intercettare nuovi pannelli
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    // Ottimizza i pannelli già esistenti
+    document.querySelectorAll('.vector-layer-panel').forEach(panel => {
+        optimizeLayerPanel(panel, options);
+    });
+    
+    document.querySelectorAll('.vector-layer-dialog').forEach(dialog => {
+        optimizeDialog(dialog, options);
+    });
+    
+    document.querySelectorAll('.map-info-panel').forEach(panel => {
+        optimizeInfoPanel(panel, options);
+    });
+}
+
+/**
+ * Ottimizza il pannello dei layer per mobile
+ * @param {HTMLElement} panel - Il pannello dei layer
+ * @param {Object} options - Opzioni di configurazione
+ */
+function optimizeLayerPanel(panel, options) {
+    // Impostazioni per il pannello dei layer su mobile
+    panel.style.maxWidth = '80%';
+    panel.style.width = '260px';
+    panel.style.maxHeight = '50vh';
+    panel.style.padding = '10px';
+    panel.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+    panel.style.top = '60px'; // Sotto la barra superiore
+    
+    // Aggiusta i margini interni
+    const panelItems = panel.querySelectorAll('.vector-layer-panel-item');
+    panelItems.forEach(item => {
+        item.style.padding = '8px 0';
+    });
+    
+    // Migliora l'aspetto del pulsante di chiusura
+    const closeButton = panel.querySelector('.vector-layer-panel-header-close');
+    if (closeButton) {
+        closeButton.style.width = '26px';
+        closeButton.style.height = '26px';
+        closeButton.style.display = 'flex';
+        closeButton.style.alignItems = 'center';
+        closeButton.style.justifyContent = 'center';
+    }
+    
+    // Previeni sovrapposizione di testo
+    const labels = panel.querySelectorAll('.vector-layer-panel-item label');
+    labels.forEach(label => {
+        label.style.fontSize = '14px';
+        label.style.overflow = 'hidden';
+        label.style.textOverflow = 'ellipsis';
+        label.style.whiteSpace = 'nowrap';
+        label.style.maxWidth = 'calc(100% - 30px)';
+    });
+    
+    // Aggiungi la possibilità di chiuderlo con uno swipe verso il basso
+    addSwipeToCloseGesture(panel);
+}
+
+/**
+ * Ottimizza i dialoghi per mobile
+ * @param {HTMLElement} dialog - Il dialogo
+ * @param {Object} options - Opzioni di configurazione
+ */
+function optimizeDialog(dialog, options) {
+    // Impostazioni per i dialoghi su mobile
+    dialog.style.width = '85%';
+    dialog.style.maxWidth = '300px';
+    dialog.style.padding = '15px';
+    dialog.style.top = '60px'; // Sotto la barra superiore
+    
+    // Imposta un margine più grande sotto l'ultimo input per evitare problemi con le tastiere virtuali
+    dialog.style.paddingBottom = '20px';
+    
+    // Titolo dialogo
+    const dialogTitle = dialog.querySelector('h3, h4');
+    if (dialogTitle) {
+        dialogTitle.style.fontSize = '16px';
+        dialogTitle.style.marginBottom = '12px';
+    }
+    
+    // Aumenta dimensione degli input e pulsanti
+    const inputs = dialog.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.style.padding = '8px';
+        input.style.fontSize = '15px'; // Previene lo zoom automatico su iOS
+        input.style.height = '36px';
+        input.style.boxSizing = 'border-box';
+        input.style.marginBottom = '10px';
+        input.style.width = '100%';
+    });
+    
+    // Ottimizza i pulsanti
+    const buttons = dialog.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.style.padding = '8px 12px';
+        button.style.fontSize = '15px';
+        button.style.height = '36px';
+        button.style.margin = '5px';
+    });
+    
+    // Assicuriamo che la riga dei pulsanti sia centrata
+    const buttonRow = dialog.querySelector('.vector-layer-dialog-buttons, .buttons-container');
+    if (buttonRow) {
+        buttonRow.style.display = 'flex';
+        buttonRow.style.justifyContent = 'center';
+        buttonRow.style.marginTop = '10px';
+    }
+}
+
+/**
+ * Ottimizza il pannello info per mobile
+ * @param {HTMLElement} panel - Il pannello info
+ * @param {Object} options - Opzioni di configurazione
+ */
+function optimizeInfoPanel(panel, options) {
+    // Impostazioni per i pannelli info su mobile
+    panel.style.maxWidth = '80%';
+    panel.style.width = '240px';
+    panel.style.bottom = '75px'; // Sopra il selettore di basemap
+    panel.style.right = '10px';
+    panel.style.padding = '10px';
+    panel.style.fontSize = '13px';
+    
+    // Previeni sovrapposizione di testo
+    const coordLabels = panel.querySelectorAll('.coord-label');
+    coordLabels.forEach(label => {
+        label.style.fontSize = '12px';
+        label.style.marginRight = '5px';
+    });
+    
+    const coordValues = panel.querySelectorAll('.coord-value');
+    coordValues.forEach(value => {
+        value.style.fontSize = '11px';
+        value.style.overflowX = 'hidden';
+        value.style.textOverflow = 'ellipsis';
+        value.style.display = 'inline-block';
+        value.style.maxWidth = '90px';
+    });
+    
+    // Migliora la leggibilità della tabella di coordinate
+    const coordTable = panel.querySelector('table');
+    if (coordTable) {
+        coordTable.style.width = '100%';
+        coordTable.style.tableLayout = 'fixed';
+        
+        const cells = coordTable.querySelectorAll('td');
+        cells.forEach(cell => {
+            cell.style.padding = '3px 5px';
+            cell.style.verticalAlign = 'top';
+        });
+    }
+}
+
+/**
+ * Aggiunge gesture di swipe per chiudere i pannelli
+ * @param {HTMLElement} element - Elemento a cui aggiungere la gesture
+ */
+function addSwipeToCloseGesture(element) {
+    let startY = 0;
+    let startX = 0;
+    let startTime = 0;
+    
+    element.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        startTime = Date.now();
+    }, { passive: true });
+    
+    element.addEventListener('touchmove', (e) => {
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+        
+        // Se lo swipe è verso il basso e significativo
+        if (deltaY > 60) {
+            // Applica trasformazione in tempo reale per seguire il dito
+            element.style.transform = `translateY(${deltaY * 0.5}px)`;
+            element.style.opacity = `${1 - (deltaY / 300)}`;
+        }
+    }, { passive: true });
+    
+    element.addEventListener('touchend', (e) => {
+        const endY = e.changedTouches[0].clientY;
+        const deltaY = endY - startY;
+        const deltaX = e.changedTouches[0].clientX - startX;
+        const elapsedTime = Date.now() - startTime;
+        
+        // Verifica se è uno swipe verso il basso valido (veloce o lungo)
+        if ((deltaY > 100 && Math.abs(deltaX) < deltaY) || 
+            (deltaY > 50 && elapsedTime < 300 && Math.abs(deltaX) < deltaY)) {
+            // Chiudi il pannello con animazione
+            element.style.transform = 'translateY(100%)';
+            element.style.opacity = '0';
+            
+            // Rimuovi dopo l'animazione
+            setTimeout(() => {
+                if (element.parentNode) {
+                    element.parentNode.removeChild(element);
+                    
+                    // Se è un pannello layer, aggiorna lo stato del controllo
+                    if (element.classList.contains('vector-layer-panel')) {
+                        const vectorLayerControl = document.querySelector('.vector-layer-control');
+                        if (vectorLayerControl) {
+                            vectorLayerControl.click(); // Simula click per aggiornare lo stato
+                        }
+                    }
+                }
+            }, 300);
+        } else {
+            // Ripristina la posizione se lo swipe non è completo
+            element.style.transform = '';
+            element.style.opacity = '';
+        }
+    }, { passive: true });
+}

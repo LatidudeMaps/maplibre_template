@@ -1,0 +1,56 @@
+/* ==========================================================================
+   MEDIA QUERIES
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .copyright-panel {
+    max-width: 250px;
+    font-size: 11px;
+  }
+  
+  .map-info-panel {
+    right: 10px;
+    font-size: 11px;
+    min-width: 180px;
+  }
+
+  .map-info-panel {
+    right: 10px;
+    font-size: 12px;
+    min-width: 220px;
+  }
+  
+  .map-info-title {
+    font-size: 14px;
+  }
+  
+  .map-info-value {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .copyright-panel {
+    max-width: 200px;
+    font-size: 10px;
+  }
+  
+  .map-info-panel {
+    right: 5px;
+    bottom: 5px;
+    min-width: 160px;
+    padding: 6px;
+  }
+  
+  .zoom-value {
+    font-size: 15px;
+  }
+  
+  .bearing-value, .pitch-value {
+    font-size: 12px;
+  }
+  
+  .map-info-main {
+    gap: 4px;
+  }
+}

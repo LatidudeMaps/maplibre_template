@@ -1,0 +1,43 @@
+/* ==========================================================================
+   STILI PER IL SELETTORE DI BASEMAP SU DISPOSITIVI MOBILI
+   ========================================================================== */
+
+/* Stile per il selettore di basemap */
+.mobile-horizontal-controls .basemap-buttons-control {
+    background-color: var(--mobile-background-color) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--mobile-container-shadow) !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+    transform: none !important;
+}
+
+.mobile-horizontal-controls .basemap-buttons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0 !important;
+}
+
+.mobile-horizontal-controls .basemap-button {
+    margin: 0 !important;
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background-color: transparent !important;
+    color: var(--mobile-text-color) !important;
+}
+
+.mobile-horizontal-controls .basemap-button.active {
+    background-color: var(--mobile-primary-color) !important;
+    color: white !important;
+}
+
+/* Nascondi la minimap su mobile */
+.mobile-horizontal-controls .minimap-container,
+.mobile-device .minimap-container {
+    display: none !important;
+}

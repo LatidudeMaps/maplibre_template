@@ -1,0 +1,44 @@
+/* ==========================================================================
+   MEDIA QUERIES PER ADATTAMENTO RESPONSIVE
+   ========================================================================== */
+
+/* Personalizzazioni per diverse dimensioni di schermo */
+@media (max-width: 480px) {
+    .mobile-horizontal-controls .mobile-top-controls-container {
+        padding: 0 3px !important;
+    }
+    
+    .mobile-horizontal-controls .settings-controls-container {
+        right: 3px !important;
+    }
+    
+    .mobile-device .maplibregl-ctrl-scale {
+        margin: 0 0 2px 10px !important;
+    }
+    
+    .mobile-device .basemap-button {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Aggiustamenti per orientamento landscape su schermi piccoli */
+@media (max-height: 450px) and (orientation: landscape) {
+    .mobile-horizontal-controls .mobile-top-controls-container {
+        top: 3px !important;
+    }
+    
+    .mobile-horizontal-controls .settings-controls-container {
+        top: 40px !important;
+    }
+    
+    .mobile-device .map-info-panel {
+        bottom: 50px !important;
+        max-height: 120px !important;
+        overflow-y: auto !important;
+    }
+    
+    .mobile-device .basemap-buttons-control {
+        bottom: 20px !important;
+    }
+}

@@ -1,0 +1,117 @@
+/* ==========================================================================
+   STILI PER I PANNELLI SU DISPOSITIVI MOBILI
+   ========================================================================== */
+
+/* Migliora la visualizzazione dei popup e pannelli su mobile */
+.mobile-device .maplibregl-popup {
+    max-width: 85vw !important;
+}
+
+.mobile-device .maplibregl-popup-content {
+    padding: 10px !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    background-color: var(--mobile-background-color) !important;
+    color: var(--mobile-text-color) !important;
+}
+
+/* Aumenta la dimensione dell'area di tocco per chiudere un popup */
+.mobile-device .maplibregl-popup-close-button {
+    padding: 5px !important;
+    font-size: 18px !important;
+    top: 2px !important;
+    right: 2px !important;
+    color: var(--mobile-text-color) !important;
+}
+
+/* Miglioramenti per i controlli dei layer vettoriali */
+.mobile-device .vector-layer-panel {
+    box-shadow: var(--mobile-container-shadow) !important;
+    border-radius: 6px !important;
+    background-color: var(--mobile-background-color) !important;
+    color: var(--mobile-text-color) !important;
+    z-index: 999 !important;
+}
+
+.mobile-device .vector-layer-panel-header {
+    padding: 8px 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    border-bottom: 1px solid var(--mobile-border-color) !important;
+}
+
+.mobile-device .vector-layer-panel-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}
+
+.mobile-device .vector-layer-panel-item {
+    padding: 8px 10px !important;
+    border-top: 1px solid var(--mobile-border-color) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.mobile-device .vector-layer-panel-remove {
+    width: 26px !important;
+    height: 26px !important;
+    line-height: 26px !important;
+    text-align: center !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 3px !important;
+    margin-left: 5px !important;
+}
+
+.mobile-device .vector-layer-panel-item label {
+    font-size: 13px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: calc(100% - 35px) !important;
+    line-height: 1.2 !important;
+}
+
+/* Gestisci le informazioni di coordinate in modo più compatto */
+.mobile-device .map-info-panel {
+    padding: 10px !important;
+    font-size: 12px !important;
+    background-color: var(--mobile-background-color) !important;
+    color: var(--mobile-text-color) !important;
+    box-shadow: var(--mobile-container-shadow) !important;
+    border-radius: 6px !important;
+    line-height: 1.3 !important;
+    z-index: 998 !important;
+}
+
+.mobile-device .map-info-panel table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.mobile-device .map-info-panel td {
+    padding: 3px 5px !important;
+    vertical-align: top !important;
+}
+
+.mobile-device .coord-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    margin-right: 5px !important;
+}
+
+.mobile-device .coord-value {
+    font-size: 11px !important;
+    font-family: monospace !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100px !important;
+    display: inline-block !important;
+}

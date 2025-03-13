@@ -1,0 +1,47 @@
+/* ==========================================================================
+   ANIMAZIONI PER DISPOSITIVI MOBILI
+   ========================================================================== */
+
+/* Evidenziazione al tocco per i controlli */
+.mobile-touch-active {
+    background-color: rgba(0, 120, 255, 0.15) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Effetto ripple (onda) al tocco */
+.mobile-touch-ripple {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+    transform: scale(0);
+    border-radius: 50%;
+    pointer-events: none;
+    width: 100px;
+    height: 100px;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+    animation: mobile-ripple 0.5s ease-out forwards;
+}
+
+.dark .mobile-touch-ripple {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+@keyframes mobile-ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Animazioni */
+@keyframes slide-up {
+    from {
+        transform: translate(-50%, 50px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}

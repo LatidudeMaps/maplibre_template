@@ -1,0 +1,182 @@
+/* ==========================================================================
+   STILI DEI PANNELLI INFORMATIVI
+   ========================================================================== */
+
+/* Pannello copyright */
+.copyright-panel {
+  position: relative;
+  overflow: visible;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgb(var(--ml-c-bg-1));
+  border-radius: var(--ml-ctrl-border-radius);
+  box-shadow: var(--ml-shadow);
+  transition: var(--transition-smooth);
+  font-family: var(--ml-font);
+  font-size: 12px;
+  line-height: 1.4;
+  max-width: 300px;
+  transform: scale(1);
+}
+
+.copyright-main-text {
+  font-weight: 500;
+  font-size: 16px;
+  color: rgb(var(--ml-c-icon-1));
+  transition: color 0.3s ease;
+}
+
+.copyright-author-text,
+.copyright-text {
+  color: rgb(var(--ml-c-icon-1) / 0.7);
+  font-size: 11px;
+  transition: color 0.3s ease;
+}
+
+/* Stile per i link nel pannello copyright */
+.copyright-panel a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: rgb(var(--ml-c-icon-1) / 0.7);
+  padding: 4px 0;
+  transition: all 0.2s ease;
+}
+
+.copyright-panel a:hover,
+.copyright-panel a:focus {
+  color: rgb(var(--ml-c-icon-1));
+  padding-left: 4px;
+}
+
+/* Pannello info mappa */
+.map-info-panel {
+  padding: 8px;
+  min-width: 160px;
+  max-width: 280px;
+  background-color: rgb(var(--ml-c-bg-1));
+  color: rgb(var(--ml-c-icon-1));
+  font-family: var(--ml-font);
+  font-size: 12px;
+  position: absolute;
+  right: 40px;
+  bottom: 0;
+  border-radius: var(--ml-ctrl-border-radius);
+  box-shadow: var(--ml-shadow-popup);
+  transition: var(--transition-smooth);
+  z-index: 100;
+}
+
+/* Container principale */
+.map-info-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Sezioni del pannello */
+.map-info-section {
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+
+/* Sezione della vista (zoom, bearing, pitch) */
+.map-view-section {
+  background-color: rgba(var(--ml-c-active), 0.07);
+  border-left: 3px solid rgb(var(--ml-c-active));
+}
+
+/* Stile per zoom (informazione primaria) */
+.map-info-primary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.zoom-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(var(--ml-c-active));
+}
+
+/* Stile per bearing e pitch (informazioni secondarie) */
+.map-info-secondary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bearing-value, .pitch-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Sezione coordinate */
+.map-coords-section {
+  background-color: rgba(var(--ml-c-icon-1), 0.03);
+  border-left: 3px solid rgba(var(--ml-c-icon-1), 0.2);
+}
+
+/* Label per le coordinate */
+.coords-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(var(--ml-c-icon-1), 0.6);
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+/* Container per le coordinate SW e NE */
+.coords-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Singola riga di coordinate */
+.coord-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Label per coordinate SW e NE */
+.coord-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(var(--ml-c-icon-1), 0.7);
+  width: 20px;
+}
+
+/* Valori delle coordinate */
+.coord-value {
+  font-family: monospace;
+  font-size: 11px;
+  color: rgba(var(--ml-c-icon-1), 0.9);
+}
+
+/* Stile per le chiavi */
+.info-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 3px;
+  background-color: rgba(var(--ml-c-icon-1), 0.1);
+  color: rgba(var(--ml-c-icon-1), 0.8);
+  margin-right: 3px;
+}
+
+/* Separatore inline */
+.separator {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(var(--ml-c-icon-1), 0.3);
+  margin: 0 4px;
+}

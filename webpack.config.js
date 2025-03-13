@@ -21,6 +21,17 @@ module.exports = {
       filename: 'index.html',
     }),
   ],
+  resolve: {
+    fallback: {
+      'path': require.resolve('path-browserify'),
+      'stream': require.resolve('stream-browserify'),
+      'buffer': require.resolve('buffer'),
+    },
+  },
+  // Configura polyfill globali necessari
+  experiments: {
+    syncWebAssembly: true,  // Supporto per WebAssembly
+  },
   devServer: {
     static: {
       directory: path.join(__dirname, 'dist'),

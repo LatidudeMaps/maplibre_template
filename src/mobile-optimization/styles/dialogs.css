@@ -1,0 +1,58 @@
+/* ==========================================================================
+   STILI PER I DIALOGHI SU DISPOSITIVI MOBILI
+   ========================================================================== */
+
+/* Stili per i dialoghi */
+.mobile-device .vector-layer-dialog {
+    box-shadow: var(--mobile-container-shadow) !important;
+    border-radius: 8px !important;
+    background-color: var(--mobile-background-color) !important;
+    color: var(--mobile-text-color) !important;
+    z-index: 1002 !important; /* Sopra tutti gli altri elementi */
+}
+
+.mobile-device .vector-layer-dialog h3,
+.mobile-device .vector-layer-dialog h4 {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    margin: 0 0 12px 0 !important;
+    padding: 0 !important;
+}
+
+.mobile-device .vector-layer-dialog input, 
+.mobile-device .vector-layer-dialog select,
+.mobile-device .vector-layer-dialog button {
+    height: 36px !important;
+    font-size: 15px !important; /* Previeni lo zoom automatico su iOS */
+    border-radius: 4px !important;
+    border: 1px solid var(--mobile-border-color) !important;
+}
+
+.mobile-device .vector-layer-dialog input,
+.mobile-device .vector-layer-dialog select {
+    width: 100% !important;
+    padding: 5px 8px !important;
+    margin-bottom: 10px !important;
+    box-sizing: border-box !important;
+}
+
+.mobile-device .vector-layer-dialog-buttons,
+.mobile-device .buttons-container {
+    display: flex !important;
+    justify-content: center !important;
+    margin-top: 15px !important;
+    gap: 10px !important;
+}
+
+.mobile-device .vector-layer-dialog button {
+    padding: 0 15px !important;
+    background-color: var(--mobile-primary-color) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.mobile-device .vector-layer-dialog button.cancel-button {
+    background-color: transparent !important;
+    color: var(--mobile-text-color) !important;
+    border: 1px solid var(--mobile-border-color) !important;
+}
