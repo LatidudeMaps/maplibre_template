@@ -11,6 +11,7 @@
 @import './controls.css';
 @import './panels.css';
 @import './theme-toggle.css';
+@import './export-control.css';
 
 /* Importa le utilità e responsive */
 @import './animations.css';

@@ -15,6 +15,8 @@ import BasemapSelector from './BasemapSelector';
 import VectorLayerControl from './VectorLayerControl';
 // Import del controllo per il Layer Panel
 import LayerPanelControl from './LayerPanelControl';
+// Import del controllo per l'esportazione
+import { ExportControl } from './map-export';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Controlla se è stato salvato un tema e applicalo
@@ -34,7 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
         center: [12.4963, 41.9027], // Coordinate di Roma
         zoom: 5,
         pitch: 0,
-        maxPitch: 85
+        maxPitch: 85,
+        preserveDrawingBuffer: true // Necessario per consentire la cattura della mappa
     });
 
     // Quando la mappa è caricata, aggiungi i controlli
@@ -57,6 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Aggiungi il controllo per il Layer Panel
         map.addControl(new LayerPanelControl({
             vectorLayerControlRef: vectorLayerControl
+        }), 'top-right');
+        
+        // Aggiungi il controllo per l'esportazione della mappa con @watergis/maplibre-gl-export
+        map.addControl(new ExportControl({
+            format: 'pdf',
+            size: 'a4',
+            landscape: true,
+            dpi: 300,
+            filename: 'Mappa_' + new Date().toLocaleDateString().replace(/\//g, '-'),
+            credits: '© LatidudeMaps ' + new Date().getFullYear()
         }), 'top-right');
         
         map.addControl(new SettingsControl(), 'top-right');

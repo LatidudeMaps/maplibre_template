@@ -1,0 +1,74 @@
+/* ==========================================================================
+   STILI PER IL CONTROLLO DI ESPORTAZIONE
+   ========================================================================== */
+
+/* Stile per il pulsante di esportazione */
+.maplibregl-ctrl-icon.maplibregl-ctrl-export {
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M6.5 14.5H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1"/><path d="M21 15v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-5"/><rect x="11" y="14" width="7" height="5" rx="1"/><circle cx="9" cy="7" r="1"/><path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.07 0L2 10"/></svg%3E');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
+
+.dark .maplibregl-ctrl-icon.maplibregl-ctrl-export {
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23cbd5e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M6.5 14.5H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1"/><path d="M21 15v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-5"/><rect x="11" y="14" width="7" height="5" rx="1"/><circle cx="9" cy="7" r="1"/><path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.07 0L2 10"/></svg%3E');
+}
+
+/* Personalizzazione del menu dropdown */
+.maplibregl-export-list {
+  background-color: rgb(var(--ml-c-bg-1));
+  color: rgb(var(--ml-c-icon-1));
+  box-shadow: var(--ml-shadow-popup);
+  border-radius: var(--ml-ctrl-border-radius);
+  font-family: var(--ml-font);
+}
+
+.maplibregl-export-list > button {
+  color: rgb(var(--ml-c-icon-1));
+  background-color: transparent;
+  transition: var(--transition-default);
+}
+
+.maplibregl-export-list > button:hover {
+  background-color: rgba(var(--ml-c-active), 0.1);
+  color: rgb(var(--ml-c-active));
+}
+
+/* Personalizzazione dei controlli del dialog di esportazione */
+.maplibregl-ctrl-export-section {
+  font-family: var(--ml-font);
+}
+
+.maplibregl-ctrl-export-section select,
+.maplibregl-ctrl-export-section input {
+  font-family: var(--ml-font);
+  background-color: rgb(var(--ml-c-bg-1));
+  color: rgb(var(--ml-c-icon-1));
+  border: 1px solid rgba(var(--ml-c-icon-1), 0.2);
+  border-radius: var(--ml-ctrl-border-radius);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+/* Personalizzazione dei bottoni */
+.maplibregl-ctrl-export-button {
+  font-family: var(--ml-font);
+  background-color: rgb(var(--ml-c-active));
+  color: white;
+  border: none;
+  border-radius: var(--ml-ctrl-border-radius);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  cursor: pointer;
+  transition: var(--transition-default);
+}
+
+.maplibregl-ctrl-export-button:hover {
+  background-color: rgba(var(--ml-c-active), 0.8);
+}
+
+/* Personalizzazione dell'area di stampa */
+.maplibregl-ctrl-export-printable-area {
+  border: 2px dashed rgb(var(--ml-c-active));
+  background-color: rgba(var(--ml-c-active), 0.05);
+}
